@@ -157,23 +157,6 @@ const PAGES = [
       { h: 'Bật pull', html: '<pre><code>npx wrangler queues consumer http add &lt;queue&gt;</code></pre>' + ul(['Đang có Worker consumer thì phải gỡ trước.', 'Token cần <b>Queues Read + Write</b> (ack là ghi). Quyền này áp lên mọi queue trong account, nên bật giới hạn IP.']) },
     ] },
 
-  // ---------- Proxy và cache ----------
-  { id: 'proxy', group: 'Proxy và cache', title: 'Đám mây cam, SSL mode, IP thật',
-    lead: 'Phần này chưa học kỹ. Đây là các ý chính cần nắm.',
-    sections: [
-      { h: 'Ý chính', html: ul(['Đám mây cam: request đi qua Cloudflare (có cache, WAF, ẩn IP server). Đám mây xám: chỉ là DNS.', 'Flexible: đoạn Cloudflare → server là HTTP trần, và ai biết IP server vẫn vào thẳng được. Nên dùng Full (strict).', 'IP người dùng thật: header <code>CF-Connecting-IP</code>. Quốc gia: <code>CF-IPCountry</code> (<code>XX</code> = không rõ, <code>T1</code> = Tor).']) },
-      { h: 'Đám mây cam trong DNS', html: shot('dns', 'DNS → Records: cột Proxy status. Đám mây cam (Proxied) = đi qua Cloudflare. Bản ghi loại Tunnel trỏ vào Cloudflare Tunnel, loại R2 do custom domain của bucket tạo ra.') },
-      { h: 'Thời gian chờ', html: ul(['Server trả lời quá khoảng 100 giây → <code>524</code>. Gói thường không nâng được.', 'Việc chạy lâu phải đưa vào job/hàng đợi, không làm trong request.']) },
-      { h: 'SSL mode', html: shot('ssl', 'SSL/TLS → Overview: zone này đang ở Flexible, tức đoạn Cloudflare → server không mã hoá. Ô "None (not secure)" là số request đi HTTP.') },
-    ] },
-  { id: 'cache', group: 'Proxy và cache', title: 'Cache và purge',
-    lead: 'Cloudflare mặc định cache theo đuôi file, không cache HTML.',
-    sections: [
-      { h: 'Mặc định', html: ul(['Cache theo đuôi file (js, css, jpg…), không xét Content-Type. HTML, JSON không cache.', 'Cache key gồm cả query string: <code>a.js?v=2</code> là một bản khác <code>a.js</code>.', 'Server không gửi Cache-Control → edge giữ 2 giờ; trình duyệt giữ theo Browser TTL (mặc định 4 giờ).', 'Có <code>Set-Cookie</code> hoặc <code>Cache-Control: no-cache/no-store/private</code> thì không cache.']) },
-      { h: 'Trên dashboard', html: shot('caching', 'Caching → Configuration: Purge Cache (xoá ở edge), Caching Level, và Browser Cache TTL (mặc định 4 giờ).') },
-      { h: 'Bẫy', html: callout('bad', 'Purge rồi mà người dùng vẫn thấy bản cũ', 'Purge chỉ xoá ở edge, không xoá bản trong trình duyệt. File đổi nội dung tại cùng URL thì nên đổi URL (thêm <code>?v=&lt;commit&gt;</code>) thay vì trông vào purge.') },
-    ] },
-
   // ---------- Công cụ ----------
   { id: 'mo-phong', group: 'Công cụ', title: 'Mô phỏng một message trong Queue', sim: true,
     lead: 'Bấm các nút để xem một message đi qua pull, ack, retry và hết visibility timeout. Giả định: mỗi lần giao (pull) tăng attempts lên 1, max_retries = 3.',
@@ -184,7 +167,7 @@ const PAGES = [
       { h: 'Lỗi HTTP do Cloudflare sinh', html: table(['Mã', 'Nghĩa', 'Kiểm'], [
         ['520', 'Server trả rỗng/hỏng, header quá lớn, cắt kết nối giữa chừng', 'Log lỗi nginx cùng giờ'], ['521', 'Server từ chối kết nối', 'Web server có chạy không, firewall có chặn IP Cloudflare không'],
         ['522', 'Không kết nối được trong 19 giây', 'Server quá tải, firewall bỏ gói'], ['524', 'Kết nối được nhưng trả lời quá ~100 giây', 'Request chạy lâu → đưa vào job'],
-        ['525 / 526', 'Lỗi TLS giữa Cloudflare và server', 'SSL mode, cert của server'], ['403 (trang Cloudflare)', 'Bị WAF/Bot chặn', 'Security → Events'], ['429', 'Vượt rate limit', 'Header <code>Retry-After</code>']]) },
+        ['525 / 526', 'Lỗi TLS giữa Cloudflare và server', 'SSL mode, cert của server'], ['530 (kèm mã 1xxx)', 'Cloudflare không tới được origin: tunnel tắt (1033), DNS origin lỗi (1016)…', 'Tunnel có chạy không, bản ghi trỏ đúng chưa'], ['403 (trang Cloudflare)', 'Bị WAF/Bot chặn', 'Security → Events'], ['429', 'Vượt rate limit', 'Header <code>Retry-After</code>']]) },
       { h: 'Xem ai bị chặn', html: shot('security', 'Security → Analytics → Events: mỗi dòng là một request bị chặn, kèm quốc gia, IP và luật chặn (Managed rules). Gặp 403 lạ thì xem ở đây trước.') },
       { h: 'Lỗi API hay gặp', html: table(['Mã', 'Nghĩa'], [['401 / 10101', 'Token sai'], ['403 / 10102', 'Token thiếu quyền'], ['404 / 7003', 'Sai account id'], ['403 / 10203', 'Domain/account chưa bật gửi mail'], ['403 / 10207', 'Account bị dừng gửi mail (uy tín xấu)'], ['400 (gửi mail)', 'Có người nhận bị suppress mà chưa bật Drop suppressed recipients']]) },
     ] },
