@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trang học hạ tầng</title>
+<meta name="description" content="Ghi chép tự học hạ tầng: AWS và Cloudflare.">
+<style>
+:root { --bg:#1f1e1c; --panel:#262523; --fg:#ece8e1; --muted:#a39d93; --line:#3a3835; --accent:#e08a5e; color-scheme: dark; }
+@media (prefers-color-scheme: light) { :root { --bg:#faf9f6; --panel:#ffffff; --fg:#23211e; --muted:#6b665e; --line:#e3dfd7; --accent:#c2603a; color-scheme: light; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.7 "Be Vietnam Pro","Segoe UI",system-ui,sans-serif; }
+main { max-width: 760px; margin: 0 auto; padding: 48px 16px; }
+h1 { font-size: 28px; font-weight: 600; margin: 0 0 6px; }
+p.lead { color: var(--muted); margin: 0 0 28px; }
+.cards { display:grid; gap:14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+a.card { display:block; text-decoration:none; color:inherit; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; }
+a.card:hover { border-color: var(--accent); }
+a.card b { display:block; font-size:18px; margin-bottom:4px; }
+a.card span { color: var(--muted); font-size: 14px; }
+footer { margin-top: 36px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Trang học hạ tầng</h1>
+  <p class="lead">Ghi lại những gì đã học khi tự làm: làm gì, vì sao, lỗi gặp phải.</p>
+  <div class="cards">
+    <a class="card" href="aws/"><b>AWS</b><span>Tài khoản, IAM, Budget, VPC, EC2 + nginx, bảng đọc lỗi, mô phỏng đường đi của request.</span></a>
+    <a class="card" href="cloudflare/"><b>Cloudflare</b><span>Account và token, quyền R2, Email Sending, Event Subscription + Queue, cache, bảng đọc lỗi.</span></a>
+  </div>
+  <footer>Mỗi lần push lên <code>main</code>, GitHub Actions tự đưa trang lên server.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Trang học tĩnh. Thư mục public/ do /usr/local/bin/hoc-deploy dựng lại từ site/ mỗi lần deploy.
+services:
+  web:
+    image: nginx:alpine
+    restart: unless-stopped
+    mem_limit: 32m
+    volumes:
+      - ../public:/usr/share/nginx/html/hoc:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      edge:
+        aliases: [hoc-web]
+networks:
+  edge:
+    external: true
+    name: vocab-edge

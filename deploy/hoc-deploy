@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Lệnh ép của key deploy (GitHub Actions) trong /root/.ssh/authorized_keys. Lệnh client gửi bị bỏ qua.
+# Đưa /opt/hoc-ha-tang lên origin/main (chỉ fast-forward), dựng public/ từ site/ và gắn ?v=<commit> cho JS/CSS.
+set -euo pipefail
+exec 9>/var/lock/hoc-deploy.lock
+flock -w 300 9 || { echo "Đang có lượt deploy khác"; exit 1; }
+cd /opt/hoc-ha-tang
+git fetch -q origin main
+git merge -q --ff-only origin/main
+v=$(git rev-parse --short HEAD)
+rm -rf public.new && cp -a site public.new
+find public.new -name '*.html' -exec sed -i -E "s#(src|href)=\"([^\"/:]+\.(js|css))\"#\1=\"\2?v=$v\"#g" {} +
+rm -rf public.old && { [ -d public ] && mv public public.old || true; } && mv public.new public && rm -rf public.old
+docker compose -p hoc-ha-tang -f deploy/docker-compose.yml up -d --quiet-pull >/dev/null
+# public/ đổi inode thư mục → restart để container thấy thư mục mới
+docker restart hoc-ha-tang-web-1 >/dev/null
+echo "Đã deploy $(git log --oneline -1)"
