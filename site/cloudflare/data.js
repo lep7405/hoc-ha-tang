@@ -73,8 +73,8 @@ const PAGES = [
     lead: 'Hai loại có thể cấp cùng một quyền. Khác nhau ở chỗ token thuộc về ai.',
     sections: [
       { h: 'So sánh', html: table(['', 'Account API token', 'User API token'], [
-      { h: 'Trên dashboard', html: shot('r2-tokens', 'R2 → API Tokens: hai bảng Account API Tokens và User API Tokens. Token [Sippy] nằm ở bảng User, tức là gắn với người bật Sippy.') },
         ['Thuộc về', 'Cả account', 'Người tạo ra token'], ['Người tạo rời account', 'Token <b>vẫn chạy</b>', 'Token <b>ngừng chạy</b>'], ['Nên dùng cho', 'Server, production', 'Việc cá nhân, thử nghiệm']]) },
+      { h: 'Trên dashboard', html: shot('r2-tokens', 'R2 → API Tokens: hai bảng Account API Tokens và User API Tokens. Token [Sippy] nằm ở bảng User, tức là gắn với người bật Sippy.') },
       { h: 'Ví dụ hỏng', html: callout('bad', 'Người tạo token nghỉ việc, app lỗi đọc ảnh', 'Một dev tạo <b>User token</b> cho app đọc R2. Dev nghỉ, admin gỡ khỏi account → token chết theo → app lỗi ngay. Token chạy production phải là <b>Account token</b>.') },
       { h: 'Bẫy: Sippy tự tạo User token', html: ul(['Bật Sippy (chép dần từ S3 sang R2) trên dashboard sẽ tự tạo một User token tên <code>[Sippy] aws:… → r2:…</code>.', 'Người bật Sippy rời account thì Sippy có thể không ghi vào R2 được nữa (suy luận, chưa thử).']) },
       { h: 'Giữ token an toàn', html: ul(['Chọn quyền yếu nhất đủ dùng, chỉ cho đúng tài nguyên cần.', 'Bật <b>Client IP Address Filtering</b>: chỉ IP server được dùng token.', 'Đặt hạn dùng (TTL) nếu được, và ghi lại token nào cấp cho máy nào.', 'Không gửi token qua chat; đặt thẳng vào <code>.env</code> trên server.']) },
@@ -182,10 +182,10 @@ const PAGES = [
     lead: 'Nhìn mã lỗi là biết hỏng ở chặng nào.',
     sections: [
       { h: 'Lỗi HTTP do Cloudflare sinh', html: table(['Mã', 'Nghĩa', 'Kiểm'], [
-      { h: 'Xem ai bị chặn', html: shot('security', 'Security → Analytics → Events: mỗi dòng là một request bị chặn, kèm quốc gia, IP và luật chặn (Managed rules). Gặp 403 lạ thì xem ở đây trước.') },
         ['520', 'Server trả rỗng/hỏng, header quá lớn, cắt kết nối giữa chừng', 'Log lỗi nginx cùng giờ'], ['521', 'Server từ chối kết nối', 'Web server có chạy không, firewall có chặn IP Cloudflare không'],
         ['522', 'Không kết nối được trong 19 giây', 'Server quá tải, firewall bỏ gói'], ['524', 'Kết nối được nhưng trả lời quá ~100 giây', 'Request chạy lâu → đưa vào job'],
         ['525 / 526', 'Lỗi TLS giữa Cloudflare và server', 'SSL mode, cert của server'], ['403 (trang Cloudflare)', 'Bị WAF/Bot chặn', 'Security → Events'], ['429', 'Vượt rate limit', 'Header <code>Retry-After</code>']]) },
+      { h: 'Xem ai bị chặn', html: shot('security', 'Security → Analytics → Events: mỗi dòng là một request bị chặn, kèm quốc gia, IP và luật chặn (Managed rules). Gặp 403 lạ thì xem ở đây trước.') },
       { h: 'Lỗi API hay gặp', html: table(['Mã', 'Nghĩa'], [['401 / 10101', 'Token sai'], ['403 / 10102', 'Token thiếu quyền'], ['404 / 7003', 'Sai account id'], ['403 / 10203', 'Domain/account chưa bật gửi mail'], ['403 / 10207', 'Account bị dừng gửi mail (uy tín xấu)'], ['400 (gửi mail)', 'Có người nhận bị suppress mà chưa bật Drop suppressed recipients']]) },
     ] },
 ];
