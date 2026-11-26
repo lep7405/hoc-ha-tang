@@ -3,9 +3,13 @@
 Ghi chép tự học AWS và Cloudflare: làm gì, vì sao, lỗi gặp phải.
 
 - Xem: https://bai.phuoc-review-app-1.uk/hoc/
-- `site/aws/`: nhật ký setup AWS (nội dung trong `app.js`, mảng `PAGES`). Chuyển từ repo `aws-hoc-setup`.
+- `site/aws/`: nhật ký setup AWS (nội dung trong `app.js`, mảng `PAGES`). Chuyển từ repo `aws-hoc-setup` (đã archive 26/11/2026).
 - `site/cloudflare/`: học Cloudflare (nội dung trong `data.js`, mảng `PAGES`; `app.js` chỉ dựng trang).
 - Trang tĩnh, không cần build. Mở `site/index.html` trực tiếp cũng được.
+
+## Chạy ở đâu
+- VPS: https://bai.phuoc-review-app-1.uk/hoc/ (GitHub Actions deploy mỗi lần push).
+- EC2 lab AWS: `http://<IP EC2>/hoc-ha-tang/` (cron `git pull` 10 phút/lần, cách dựng ở trang AWS → "Deploy trang này lên EC2"). `/aws-hoc-setup/` cũ chuyển hướng về đây.
 
 ## Deploy
 Push lên `main` → GitHub Actions:
