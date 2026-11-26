@@ -1,6 +1,8 @@
 // Nội dung trang Cloudflare: mỗi phần tử PAGES là một trang (hash #id). Chỉ kiến thức chung, không ghi tên zone/bucket/token của công ty.
 const ul = (items) => '<ul>' + items.map((x) => `<li>${x}</li>`).join('') + '</ul>';
 const callout = (kind, title, body) => `<div class="callout ${kind}"><b>${title}</b><div>${body}</div></div>`;
+// Ảnh chụp dashboard (account cá nhân, đã che email/ID/IP). Bấm để xem ảnh gốc.
+const shot = (f, cap) => `<figure class="shot"><a href="img/${f}.png" target="_blank" rel="noopener"><img src="img/${f}.png" alt="${cap}" loading="lazy"></a><figcaption>${cap}</figcaption></figure>`;
 const table = (head, rows) => '<div class="tablewrap"><table><thead><tr>' + head.map((h) => `<th>${h}</th>`).join('') + '</tr></thead><tbody>'
   + rows.map((r) => '<tr>' + r.map((c) => `<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody></table></div>';
 
@@ -47,6 +49,7 @@ const PAGES = [
     lead: 'Hiểu 3 tầng này trước thì mọi màn hình trong dashboard đều dễ đọc.',
     sections: [
       { h: 'Sơ đồ', html: mapHtml() },
+      { h: 'Trên dashboard', html: shot('ban-do', 'Trang chủ account: góc trên trái là tên account ("Default account"), giữa là các zone (domain), menu trái chia theo sản phẩm: Compute, Storage &amp; databases, Application security…') },
       { h: 'Giải thích', html: ul([
         '<b>User</b>: là bạn, tức email đăng nhập.',
         '<b>Account</b>: cái nhà chứa mọi thứ, hiện ở góc trên bên trái dashboard (vd "Default account"). Một user có thể thuộc nhiều account; một account có nhiều thành viên.',
@@ -60,6 +63,7 @@ const PAGES = [
     lead: '"Rời tổ chức" nghĩa là bị gỡ khỏi danh sách thành viên của một account.',
     sections: [
       { h: 'Giống cái gì', html: ul(['Giống GitHub organization: repo thuộc org, người được mời vào org.', 'Xem danh sách: <b>Manage Account → Members</b>. Account cá nhân thì chỉ có một người là bạn.']) },
+      { h: 'Màn Members', html: shot('members', 'Manage Account → Members: account cá nhân chỉ có một thành viên, cột Super admin có dấu ✓.') },
       { h: 'Vai trò hay gặp', html: table(['Vai trò', 'Làm được'], [
         ['Super Administrator', 'Mọi thứ, kể cả mời/gỡ thành viên và billing'], ['Administrator', 'Gần như mọi thứ, trừ một số việc của Super Admin'],
         ['Administrator Read Only', 'Xem mọi cấu hình, không sửa được. Hợp để học và để kiểm tra']]) },
@@ -69,6 +73,7 @@ const PAGES = [
     lead: 'Hai loại có thể cấp cùng một quyền. Khác nhau ở chỗ token thuộc về ai.',
     sections: [
       { h: 'So sánh', html: table(['', 'Account API token', 'User API token'], [
+      { h: 'Trên dashboard', html: shot('r2-tokens', 'R2 → API Tokens: hai bảng Account API Tokens và User API Tokens. Token [Sippy] nằm ở bảng User, tức là gắn với người bật Sippy.') },
         ['Thuộc về', 'Cả account', 'Người tạo ra token'], ['Người tạo rời account', 'Token <b>vẫn chạy</b>', 'Token <b>ngừng chạy</b>'], ['Nên dùng cho', 'Server, production', 'Việc cá nhân, thử nghiệm']]) },
       { h: 'Ví dụ hỏng', html: callout('bad', 'Người tạo token nghỉ việc, app lỗi đọc ảnh', 'Một dev tạo <b>User token</b> cho app đọc R2. Dev nghỉ, admin gỡ khỏi account → token chết theo → app lỗi ngay. Token chạy production phải là <b>Account token</b>.') },
       { h: 'Bẫy: Sippy tự tạo User token', html: ul(['Bật Sippy (chép dần từ S3 sang R2) trên dashboard sẽ tự tạo một User token tên <code>[Sippy] aws:… → r2:…</code>.', 'Người bật Sippy rời account thì Sippy có thể không ghi vào R2 được nữa (suy luận, chưa thử).']) },
@@ -78,6 +83,7 @@ const PAGES = [
     lead: '4 lựa chọn là 2 câu hỏi ghép lại: được đụng tới cái gì, và được đọc hay được ghi.',
     sections: [
       { h: 'Hai câu hỏi', html: ul(['<b>Admin hay Object?</b> Admin quản lý cả <b>bucket</b> (tạo, xoá, sửa CORS, Sippy, custom domain) và mọi file. Object chỉ đụng tới <b>file trong bucket</b>.', '<b>Read only hay Read &amp; Write?</b> Write thêm quyền upload, ghi đè và xoá file.']) },
+      { h: 'Form tạo token', html: shot('r2-token-form', 'Create Account API Token: 4 mức quyền, bên dưới là Specify bucket(s) và TTL (hạn dùng).') },
       { h: 'Bốn mức', html: table(['Mức', 'Làm được', 'Lộ token thì mất'], [
         ['Admin Read &amp; Write', 'Mọi thứ, kể cả <b>xoá cả bucket</b>', 'Toàn bộ dữ liệu R2 của account'],
         ['Admin Read only', 'Xem cấu hình mọi bucket, đọc mọi file', 'Bị đọc hết, không bị xoá'],
@@ -98,6 +104,7 @@ const PAGES = [
     lead: 'Gắn custom domain vào bucket thì mọi object đều đọc được nếu biết key.',
     sections: [
       { h: 'Hiểu đúng', html: ul(['Custom domain đi qua cache của zone đó, nên áp dụng luật cache của zone.', 'Không liệt kê được bucket ở gốc, nhưng key đoán được thì vẫn đọc được.', '<code>r2.dev</code> chỉ để thử: có giới hạn tốc độ, không có cache, WAF.']) },
+      { h: 'Trên dashboard', html: shot('bucket-domain', 'Bucket → Settings: mục Custom Domains (tên miền riêng, đi qua cache của zone) và Public Development URL (r2.dev, chỉ để thử).') },
       { h: 'Bẫy', html: callout('bad', 'Ghi file riêng tư vào bucket public là lộ', 'Bucket đã gắn custom domain thì không có khái niệm "file này private". File nhạy cảm phải nằm ở bucket khác, không gắn domain, đọc qua presigned URL.') },
       { h: 'Key không tồn tại', html: ul(['Qua custom domain, key không có trả <code>403</code> (trang HTML), không phải <code>404</code>. Đừng hiểu 403 là "bị chặn quyền".']) },
     ] },
@@ -105,6 +112,7 @@ const PAGES = [
     lead: 'Bật Sippy thì lần đầu ai GET một file chưa có trên R2, R2 tự lấy từ S3 rồi giữ lại.',
     sections: [
       { h: 'Hành vi', html: ul(['Chỉ GET mới kích chép. <code>HEAD</code> (vd hàm <code>exists()</code>) <b>không</b> kích.', 'Xoá trên R2 không xoá bên S3; lần GET sau lại chép về.', 'Sửa file ở S3 sau khi đã chép thì R2 không biết.']) },
+      { h: 'Trên dashboard', html: shot('bucket-sippy', 'Bucket → Settings → On Demand Migration: tên của Sippy trên giao diện. Mũi tên từ bucket R2 sang bucket S3 nguồn, kèm Access Token để đọc S3.') },
       { h: 'Bật/tắt bằng lệnh', html: '<pre><code>npx wrangler r2 bucket sippy get &lt;bucket&gt;\nnpx wrangler r2 bucket sippy disable &lt;bucket&gt;</code></pre>' },
     ] },
 
@@ -113,8 +121,10 @@ const PAGES = [
     lead: 'Phải onboard domain trước, From phải thuộc đúng domain đó.',
     sections: [
       { h: 'Gửi', html: ul(['<code>POST /client/v4/accounts/{account_id}/email/sending/send</code>, token có quyền <b>Email Sending: Edit</b>.', 'Response có <code>message_id</code>, <code>delivered</code>, <code>queued</code>, <code>permanent_bounces</code>, <code>suppressed_recipients</code>.', 'Gói Free chỉ gửi tới địa chỉ đã verify. Workers Paid: 3.000 mail/tháng, vượt thì $0,35/1.000.']) },
+      { h: 'Uy tín gửi trên dashboard', html: shot('email-reputation', 'Email Sending → domain → Overview: 4 chỉ số Bounce, Spam complaint, Spam rejection, Delivery, kèm ngưỡng an toàn và ngưỡng rủi ro. Gói Free chỉ gửi tới địa chỉ đã verify (khung vàng).') },
       { h: 'Suppression (danh sách không gửi)', html: table(['Lý do', 'Hết hạn'], [['Complaint (bấm "Spam")', 'Không bao giờ'], ['Hard bounce', '7 ngày; địa chỉ/domain không tồn tại thì không bao giờ'], ['Soft bounce', '24 giờ'], ['Thêm tay', 'Tuỳ đặt']]) },
       { h: 'Drop suppressed recipients', html: callout('warn', 'Mặc định TẮT', 'Tắt: chỉ cần một người nhận đang bị suppress là REST trả <code>400</code> cho <b>cả request</b>. Bật: bỏ người đó, gửi phần còn lại, trả danh sách trong <code>suppressed_recipients</code>. Cài ở Email Sending → domain → Settings.') },
+      { h: 'Nơi bật', html: shot('email-settings', 'Email Sending → domain → Settings: công tắc Drop suppressed recipients (đang tắt, là mặc định). Bên dưới là các bản ghi DNS Cloudflare tự thêm, bị khoá.') },
       { h: 'Uy tín gửi', html: ul(['Ngưỡng an toàn: bounce &lt; 2%, complaint &lt; 0,1%, delivery &gt; 98%.', 'Vượt nhiều thì Cloudflare có thể dừng gửi <b>cả account</b> (403/10207).', 'Mail không có link huỷ đăng ký thì người nhận chỉ còn nút Spam → complaint tăng.']) },
     ] },
   { id: 'event-sub', group: 'Email và Queue', title: 'Event Subscription: kết quả gửi mail về đâu',
@@ -122,6 +132,7 @@ const PAGES = [
     sections: [
       { h: 'Luồng', html: '<pre><code>App gửi mail ──► Email Sending ──► Event Subscription ──► Queue ◄── App kéo về (pull) rồi ack</code></pre>' },
       { h: '6 loại event', html: ul(['<code>cf.email.sending.message.delivered</code>, <code>.deferred</code>, <code>.bounced</code>, <code>.failed</code>, <code>.rejected</code>, <code>.complained</code>.', 'Mỗi subscription gắn với <b>một domain gửi</b>.', 'Tạo: Queues → chọn queue → Subscriptions → Subscribe to events → nguồn Email Sending.']) },
+      { h: 'Form tạo subscription', html: shot('queue-subscribe-source', 'Queues → Subscribe to events: chọn Source (Email Service = email.sending), rồi chọn queue đích có sẵn hoặc tạo mới.') },
       { h: 'Trong một event có gì', html: '<pre><code>{ "type": "cf.email.sending.message.bounced",\n  "payload": { "eventId", "messageId", "recipient",\n               "delivery": { "status", "smtpEnhancedStatusCode" },\n               "bounce": { "type": "hard|soft", "classification" } },\n  "metadata": { "eventTimestamp" } }</code></pre>' },
       { h: 'Bẫy', html: ul(['Docs ví dụ <code>messageId</code> của event dạng <code>0101…-msg-…</code>, còn REST trả <code>&lt;…@domain&gt;</code>. Có khớp nhau không phải tự đo trên event thật.', '<code>bounced</code> có thể mang <code>type: soft</code> (hết lượt thử tạm thời).', 'Docs có câu "events … to verified destination addresses": phải kiểm có event cho người nhận thật không.']) },
     ] },
@@ -129,6 +140,7 @@ const PAGES = [
     lead: 'Queue giao message ít nhất một lần. App phải chịu được message trùng và không theo thứ tự.',
     sections: [
       { h: 'Kéo về (pull)', html: '<pre><code>POST /accounts/{id}/queues/{queue_id}/messages/pull\n{ "batch_size": 100, "visibility_timeout_ms": 120000 }</code></pre>' + ul(['Mỗi message có <code>lease_id</code>: giữ chỗ trong thời gian visibility timeout (mặc định 30 giây, tối đa 12 giờ).', '<code>body</code> dạng json/bytes là base64, phải giải mã.', 'Hết timeout mà chưa ack thì message tự quay lại hàng đợi.']) },
+      { h: 'Trang Queues', html: shot('queues', 'Compute → Queues: nút Create Queue và Subscribe to events. Bên phải là số thao tác trong ngày (gói Free: 10.000/ngày).') },
       { h: 'Trả lời (ack)', html: '<pre><code>POST …/messages/ack\n{ "acks": [{ "lease_id": "…" }],\n  "retries": [{ "lease_id": "…", "delay_seconds": 300 }] }</code></pre>' + ul(['<code>acks</code>: xử lý xong, xoá.', '<code>retries</code>: giao lại sau N giây (tối đa 24 giờ).']) },
       { h: 'Giới hạn', html: table(['Thứ', 'Giá trị'], [['Giữ message', 'Paid: mặc định 4 ngày, tối đa 14 · Free: 24 giờ'], ['max_retries', 'Mặc định 3, tối đa 100; quá thì xoá hoặc vào dead-letter queue'], ['Kích thước message', '128 KB'], ['Backlog mỗi queue', '25 GB']]) },
       { h: 'Docs không nói', html: callout('warn', 'Cần tự đo', 'Gọi <code>retries</code> có làm tăng <code>attempts</code> không; hết visibility timeout có tính là một lần thử không; dead-letter queue có chạy với HTTP pull không. Code nào dựa vào <code>attempts</code> để quyết định thì phải thử trên queue thật trước.') },
@@ -150,12 +162,15 @@ const PAGES = [
     lead: 'Phần này chưa học kỹ. Đây là các ý chính cần nắm.',
     sections: [
       { h: 'Ý chính', html: ul(['Đám mây cam: request đi qua Cloudflare (có cache, WAF, ẩn IP server). Đám mây xám: chỉ là DNS.', 'Flexible: đoạn Cloudflare → server là HTTP trần, và ai biết IP server vẫn vào thẳng được. Nên dùng Full (strict).', 'IP người dùng thật: header <code>CF-Connecting-IP</code>. Quốc gia: <code>CF-IPCountry</code> (<code>XX</code> = không rõ, <code>T1</code> = Tor).']) },
+      { h: 'Đám mây cam trong DNS', html: shot('dns', 'DNS → Records: cột Proxy status. Đám mây cam (Proxied) = đi qua Cloudflare. Bản ghi loại Tunnel trỏ vào Cloudflare Tunnel, loại R2 do custom domain của bucket tạo ra.') },
       { h: 'Thời gian chờ', html: ul(['Server trả lời quá khoảng 100 giây → <code>524</code>. Gói thường không nâng được.', 'Việc chạy lâu phải đưa vào job/hàng đợi, không làm trong request.']) },
+      { h: 'SSL mode', html: shot('ssl', 'SSL/TLS → Overview: zone này đang ở Flexible, tức đoạn Cloudflare → server không mã hoá. Ô "None (not secure)" là số request đi HTTP.') },
     ] },
   { id: 'cache', group: 'Proxy và cache', title: 'Cache và purge',
     lead: 'Cloudflare mặc định cache theo đuôi file, không cache HTML.',
     sections: [
       { h: 'Mặc định', html: ul(['Cache theo đuôi file (js, css, jpg…), không xét Content-Type. HTML, JSON không cache.', 'Cache key gồm cả query string: <code>a.js?v=2</code> là một bản khác <code>a.js</code>.', 'Server không gửi Cache-Control → edge giữ 2 giờ; trình duyệt giữ theo Browser TTL (mặc định 4 giờ).', 'Có <code>Set-Cookie</code> hoặc <code>Cache-Control: no-cache/no-store/private</code> thì không cache.']) },
+      { h: 'Trên dashboard', html: shot('caching', 'Caching → Configuration: Purge Cache (xoá ở edge), Caching Level, và Browser Cache TTL (mặc định 4 giờ).') },
       { h: 'Bẫy', html: callout('bad', 'Purge rồi mà người dùng vẫn thấy bản cũ', 'Purge chỉ xoá ở edge, không xoá bản trong trình duyệt. File đổi nội dung tại cùng URL thì nên đổi URL (thêm <code>?v=&lt;commit&gt;</code>) thay vì trông vào purge.') },
     ] },
 
@@ -167,6 +182,7 @@ const PAGES = [
     lead: 'Nhìn mã lỗi là biết hỏng ở chặng nào.',
     sections: [
       { h: 'Lỗi HTTP do Cloudflare sinh', html: table(['Mã', 'Nghĩa', 'Kiểm'], [
+      { h: 'Xem ai bị chặn', html: shot('security', 'Security → Analytics → Events: mỗi dòng là một request bị chặn, kèm quốc gia, IP và luật chặn (Managed rules). Gặp 403 lạ thì xem ở đây trước.') },
         ['520', 'Server trả rỗng/hỏng, header quá lớn, cắt kết nối giữa chừng', 'Log lỗi nginx cùng giờ'], ['521', 'Server từ chối kết nối', 'Web server có chạy không, firewall có chặn IP Cloudflare không'],
         ['522', 'Không kết nối được trong 19 giây', 'Server quá tải, firewall bỏ gói'], ['524', 'Kết nối được nhưng trả lời quá ~100 giây', 'Request chạy lâu → đưa vào job'],
         ['525 / 526', 'Lỗi TLS giữa Cloudflare và server', 'SSL mode, cert của server'], ['403 (trang Cloudflare)', 'Bị WAF/Bot chặn', 'Security → Events'], ['429', 'Vượt rate limit', 'Header <code>Retry-After</code>']]) },
