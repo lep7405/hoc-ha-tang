@@ -52,6 +52,58 @@ const archHtml = () => `<div class="arch">
   <p class="legend"><span class="box learned mini"></span> viền xanh = đã làm trong bài lab</p>
 </div>`;
 
+
+// Menu VPC console: [nhóm, tên mục, là gì, dùng lúc, mức, bài]
+const VC_FILTERS = [['all', 'Tất cả'], ['p1', 'Học ngay'], ['dung', 'Dùng lúc dựng'], ['vh', 'Dùng lúc vận hành']];
+const VC = [
+  ['Virtual private cloud', 'Your VPCs', 'Danh sách VPC. Mỗi region có sẵn 1 default VPC (<code>172.31.0.0/16</code>). Bật DNS hostnames ở đây.', 'dung', 1, 'bai-1'],
+  ['Virtual private cloud', 'Subnets', 'Cắt dải IP của VPC thành khúc nhỏ, mỗi khúc ở 1 AZ. Bật Auto-assign public IP cho subnet public.', 'dung', 1, 'bai-1'],
+  ['Virtual private cloud', 'Route tables', 'Bảng chỉ đường cho gói tin đi ra. Dòng <code>0.0.0.0/0 → igw</code> làm subnet thành public.', 'dung', 1, 'route-table'],
+  ['Virtual private cloud', 'Internet gateways', 'Cổng nối VPC với Internet, đổi IP private ↔ public. Mỗi VPC tối đa 1 cái. Miễn phí.', 'dung', 1, 'bai-1'],
+  ['Virtual private cloud', 'Egress-only internet gateways', 'Giống NAT nhưng cho IPv6: cho máy gọi ra, chặn chiều vào.', 'dung', 3, ''],
+  ['Virtual private cloud', 'Carrier gateways', 'Dùng với Wavelength (máy đặt trong mạng 5G của nhà mạng).', 'dung', 3, ''],
+  ['Virtual private cloud', 'DHCP option sets', 'Cấu hình DNS server, tên miền nội bộ cấp cho máy. Gần như luôn để mặc định.', 'dung', 3, ''],
+  ['Virtual private cloud', 'Elastic IPs', 'Public IP cố định, không đổi khi Stop/Start. <b>Tính tiền</b> khoảng 0,005 USD/giờ.', 'dung', 1, 'bai-8'],
+  ['Virtual private cloud', 'Managed prefix lists', 'Gom nhiều dải IP thành một danh sách có tên, dùng lại trong route và Security Group.', 'dung', 2, ''],
+  ['Virtual private cloud', 'NAT gateways', 'Cho máy ở private subnet gọi ra Internet mà Internet không gọi vào được. <b>Tốn tiền</b>: khoảng 45 USD/tháng nếu để chạy.', 'dung', 1, 'bai-5'],
+  ['Virtual private cloud', 'Peering connections', 'Nối 2 VPC với nhau bằng đường private. Dải IP 2 bên không được trùng.', 'dung', 2, 'bai-7'],
+  ['Virtual private cloud', 'Route servers', 'Trao đổi route động (BGP) với thiết bị mạng đặt trong VPC.', 'dung', 3, ''],
+  ['Security', 'Security groups', 'Firewall gắn vào từng máy (card mạng). Chỉ có rule cho phép, nhớ chiều về.', 'dung', 1, 'bai-3'],
+  ['Security', 'Network ACLs', 'Firewall ở cửa subnet. Có rule chặn, xét theo số thứ tự, không nhớ chiều về.', 'dung', 1, 'bai-4'],
+  ['Security', 'Block Public Access', 'Một công tắc chặn mọi đường Internet vào/ra VPC, kể cả khi route có IGW.', 'vh', 2, ''],
+  ['PrivateLink and Lattice', 'Endpoints', 'Gọi dịch vụ AWS (S3, SSM…) bằng đường private, không qua Internet hay NAT. Loại gateway cho S3 thì miễn phí.', 'dung', 1, 'bai-7'],
+  ['PrivateLink and Lattice', 'Endpoint services', 'Chia sẻ dịch vụ của mình cho VPC của tài khoản khác qua PrivateLink.', 'dung', 3, ''],
+  ['PrivateLink and Lattice', 'Lattice services / networks', 'Cho các service ở nhiều VPC, nhiều tài khoản gọi nhau mà không cần peering.', 'dung', 3, ''],
+  ['Network Analysis', 'Reachability Analyzer', 'Hỏi "máy A tới được máy B cổng 80 không?". Nó chỉ ra lớp nào chặn: SG, NACL hay route. Tốn khoảng 0,1 USD mỗi lần chạy.', 'vh', 1, 'bai-6'],
+  ['Network Analysis', 'Network Access Analyzer', 'Quét cả VPC tìm đường hở ngoài ý muốn, ví dụ database lộ ra Internet.', 'vh', 2, ''],
+  ['Network Analysis', 'Traffic Mirroring', 'Sao chép gói tin của một máy sang máy khác để phân tích sâu (như Wireshark).', 'vh', 3, ''],
+  ['Network Analysis', 'Flow logs (tab trong VPC/subnet)', 'Ghi lại từng kết nối: ai gọi ai, cổng nào, ACCEPT hay REJECT. Công cụ chính để soi timeout.', 'vh', 1, 'bai-6'],
+  ['Virtual private network (VPN)', 'Customer gateways, Virtual private gateways, Site-to-Site VPN', 'Nối mạng văn phòng hoặc datacenter của công ty vào VPC qua đường hầm mã hoá.', 'dung', 3, ''],
+  ['Virtual private network (VPN)', 'Client VPN endpoints', 'Cho nhân viên cài app VPN trên laptop để vào mạng private của VPC.', 'dung', 2, ''],
+  ['Transit gateways', 'Transit gateways', 'Trạm trung tâm nối nhiều VPC và VPN. Dùng khi có hàng chục VPC, peering từng cặp không còn quản nổi.', 'dung', 3, ''],
+  ['Còn lại', 'IPAM', 'Quản lý dải IP cho cả công ty, tránh hai VPC dùng trùng dải.', 'dung', 3, ''],
+  ['Còn lại', 'DNS firewall, Network Firewall', 'Chặn tên miền độc hại, lọc gói tin sâu hơn Security Group. Dùng ở công ty có yêu cầu bảo mật cao.', 'vh', 2, ''],
+];
+function vcTable(g) {
+  const lv = { 1: '<span class="pill p1">Học ngay</span>', 2: '<span class="pill p2">Học sau</span>', 3: '<span class="pill">Bỏ qua</span>' };
+  const dl = { dung: 'Dựng', vh: 'Vận hành' };
+  return '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody>'
+    + VC.filter((r) => r[0] === g).map(([, n, w, d, l, b]) => `<tr data-d="${d}" data-l="${l}"><td><b>${n}</b>${b ? `<br><a href="#${b}">→ ${b}</a>` : ''}</td><td>${w}</td><td>${dl[d]}</td><td>${lv[l]}</td></tr>`).join('')
+    + '</tbody></table></div>';
+}
+function setupVc() {
+  const box = document.querySelector('.vc-filter');
+  if (!box) return;
+  box.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    box.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+    const f = b.dataset.f;
+    document.querySelectorAll('table.vc tbody tr').forEach((tr) => {
+      tr.hidden = !(f === 'all' || (f === 'p1' ? tr.dataset.l === '1' : tr.dataset.d === f));
+    });
+  });
+}
+
 const PAGES = [
   // ---------- Tổng quan ----------
   { id: 'hanh-trinh', group: 'Tổng quan', title: 'Hành trình của một request',
@@ -148,6 +200,19 @@ const PAGES = [
       ]) },
       { h: 'Đọc Resource map', html: ul(['<b>Xanh lá</b> = subnet public, <b>xanh dương</b> = subnet private. Chữ A/C = AZ <code>1a</code>/<code>1c</code>.', 'Trước khi tạo đã có sẵn 1 VPC và 3 subnet: đó là <b>default VPC</b> AWS tạo sẵn ở mỗi region.', 'VPC, subnet, route table, IGW đều <b>miễn phí</b>.']) },
       { h: 'So với DigitalOcean', html: '<p>DigitalOcean làm sẵn cho đơn giản: Droplet tạo ra là có public IP, không có subnet public/private hay route table để chỉnh. AWS đưa từng phần nhỏ để bạn tự lắp: tự chia subnet, tự quyết máy nào được ra Internet. Doanh nghiệp cần sự chi tiết này để giấu database khỏi Internet.</p>' },
+    ] },
+  { id: 'vpc-console', group: 'Mạng', title: 'Menu VPC console: mục nào để làm gì', vc: true,
+    lead: 'Đi theo đúng thứ tự menu bên trái của VPC console. Mỗi mục ghi: nó là gì, dùng lúc dựng hệ thống hay lúc vận hành, và nên học lúc nào.',
+    sections: [
+      { h: 'Đọc bảng thế nào', html: '<div class="vc-filter" role="group" aria-label="Lọc">' + VC_FILTERS.map(([k, t], i) => `<button type="button" data-f="${k}"${i ? '' : ' class="on"'}>${t}</button>`).join('') + '</div>' + ul(['<span class="pill p1">Học ngay</span> dùng ngay lúc dựng mạng cho app đầu tiên. <span class="pill p2">Học sau</span> cần khi hệ thống lớn dần. <span class="pill">Bỏ qua</span> trường hợp đặc biệt, gặp thì tra.', '<b>Dựng</b> = bấm vào để tạo, sửa cấu hình lúc setup. <b>Vận hành</b> = mở ra lúc soi lỗi, theo dõi, kiểm tra an toàn.']) },
+      { h: 'Thứ tự đề xuất khi dựng một VPC', html: '<ol class="vc-order"><li><b>Your VPCs</b>: tạo VPC, chọn dải IP.</li><li><b>Subnets</b>: chia public và private, mỗi loại ở ít nhất 2 AZ.</li><li><b>Internet gateways</b>: tạo rồi Attach vào VPC.</li><li><b>Route tables</b>: bảng public có <code>0.0.0.0/0 → igw</code>, gắn vào subnet public.</li><li><b>Security groups</b>: mở đúng cổng cho từng loại máy.</li><li><b>Network ACLs</b>: thường để mặc định, chỉ xem cho biết.</li><li><b>NAT gateways</b> hoặc <b>Endpoints</b>: khi máy ở private subnet cần gọi ra ngoài hoặc gọi S3.</li><li><b>Elastic IPs</b>: khi cần IP cố định.</li></ol><p>Lúc vận hành thì hay mở: <b>Flow logs</b> (ở tab của VPC hoặc subnet), <b>Reachability Analyzer</b>, <b>Security groups</b>.</p>' },
+      { h: 'Virtual private cloud', html: vcTable('Virtual private cloud') },
+      { h: 'Security', html: vcTable('Security') },
+      { h: 'PrivateLink and Lattice', html: vcTable('PrivateLink and Lattice') },
+      { h: 'Network Analysis', html: vcTable('Network Analysis') },
+      { h: 'Virtual private network (VPN)', html: vcTable('Virtual private network (VPN)') },
+      { h: 'Transit gateways', html: vcTable('Transit gateways') },
+      { h: 'Còn lại', html: vcTable('Còn lại') },
     ] },
   { id: 'route-table', group: 'Mạng', title: 'Route table: bảng chỉ đường',
     lead: 'Subnet là "public" vì route table của nó có đường ra Internet Gateway, không phải vì tên.',
@@ -397,6 +462,7 @@ function render() {
   if (cur && cur.classList.contains('closed')) { cur.classList.remove('closed'); cur.querySelector('.ghead').setAttribute('aria-expanded', 'true'); collapsed[p.group] = false; saveCollapsed(); }
   document.title = p.title + ' · Nhật ký setup AWS';
   if (p.sim) setupSim();
+  if (p.vc) setupVc();
   const sub = location.hash.includes('--') ? document.getElementById(location.hash.slice(1)) : null;
   if (sub) sub.scrollIntoView(); else if (id) window.scrollTo(0, 0);
   sidebar.classList.remove('open');
