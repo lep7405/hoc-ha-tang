@@ -177,7 +177,7 @@ const PAGES = [
     ] },
 
   // ---------- Mạng ----------
-  { id: 'vpc-console', group: 'VPC · Tổng quan', title: 'Bản đồ menu VPC console', vc: true,
+  { id: 'vpc-console', group: 'VPC › Tổng quan', title: 'Bản đồ menu VPC console', vc: true,
     lead: 'Đi theo đúng thứ tự menu bên trái của VPC console. Mỗi mục ghi: nó là gì, dùng lúc dựng hệ thống hay lúc vận hành, và nên học lúc nào.',
     sections: [
       { h: 'Đọc bảng thế nào', html: '<div class="vc-filter" role="group" aria-label="Lọc">' + VC_FILTERS.map(([k, t], i) => `<button type="button" data-f="${k}"${i ? '' : ' class="on"'}>${t}</button>`).join('') + '</div>' + ul(['<span class="pill p1">Học ngay</span> dùng ngay lúc dựng mạng cho app đầu tiên. <span class="pill p2">Học sau</span> cần khi hệ thống lớn dần. <span class="pill">Bỏ qua</span> trường hợp đặc biệt, gặp thì tra.', '<b>Dựng</b> = bấm vào để tạo, sửa cấu hình lúc setup. <b>Vận hành</b> = mở ra lúc soi lỗi, theo dõi, kiểm tra an toàn.']) },
@@ -190,7 +190,7 @@ const PAGES = [
       { h: 'Transit gateways', html: vcTable('Transit gateways') },
       { h: 'Còn lại', html: vcTable('Còn lại') },
     ] },
-  { id: 'goi-tin', group: 'VPC · Tổng quan', title: 'Gói tin đi qua những lớp nào',
+  { id: 'goi-tin', group: 'VPC › Tổng quan', title: 'Gói tin đi qua những lớp nào',
     lead: 'Chiều đi vào và chiều trả lời về gặp những lớp khác nhau.',
     sections: [
       { h: 'Chiều đi vào', html: '<pre><code>Trình duyệt → Internet\n → ① Internet Gateway (đổi public IP → private IP)\n → ② NACL của subnet        (mặc định cho qua hết)\n → ③ Security Group, inbound  ← lỗi 1 bị chặn ở đây\n → ④ Ubuntu / nginx có nghe cổng 80 không  ← lỗi 2 ở đây</code></pre>' },
@@ -199,7 +199,7 @@ const PAGES = [
       { h: 'Một inbound rule gồm gì', html: ul(['<b>Type</b>: mẫu điền sẵn (HTTP = TCP 80, SSH = TCP 22).', '<b>Protocol</b>: TCP, UDP, ICMP.', '<b>Port</b>: 22, 80, 443, 3306…', '<b>Source</b>: <code>0.0.0.0/0</code> (mọi người), <code>x.x.x.x/32</code> (đúng 1 IP), <code>10.0.0.0/16</code>, hoặc <b>một Security Group khác</b> (vd database chỉ nhận kết nối từ <code>hoc-web-sg</code>).', 'Security Group không biết gói tin là của chương trình nào, chỉ nhìn giao thức, cổng và IP nguồn.']) },
       { h: 'Muốn người ngoài vào được máy', html: callout('ok', 'Cần đủ 3 thứ', 'Subnet có đường ra IGW + máy có public IP + Security Group mở cổng. Thiếu một thứ là không vào được. Thử tắt từng thứ trong trang <a href="#mo-phong">Mô phỏng</a>.') },
     ] },
-  { id: 'vpc', group: 'VPC · Virtual private cloud', title: 'Your VPCs',
+  { id: 'vpc', group: 'VPC › Virtual private cloud', title: 'Your VPCs',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> VPC là cái mạng riêng của bạn trên AWS. Giống mạng wifi ở nhà, nhưng nằm trong data center AWS và thiết bị cắm vào là máy chủ.',
     sections: [
       { h: 'Mục đích của VPC', html: '<p>VPC <b>không chạy gì cả</b>: không phải server, không xử lý request. Nó là <b>cái mạng</b> để các server, database, load balancer cắm vào. VPC giải quyết 5 việc:</p><div class="tablewrap"><table><thead><tr><th>Mục đích</th><th>Nghĩa là</th><th>Ví dụ</th></tr></thead><tbody>'
@@ -224,7 +224,7 @@ const PAGES = [
       { h: 'So với DigitalOcean', html: '<p>DigitalOcean làm sẵn cho đơn giản: Droplet tạo ra là có public IP, không có subnet public/private hay route table để chỉnh. AWS đưa từng phần nhỏ để bạn tự lắp: tự chia subnet, tự quyết máy nào được ra Internet. Doanh nghiệp cần sự chi tiết này để giấu database khỏi Internet.</p>' },
       { h: 'Default VPC', html: '<ul><li>Mỗi region có sẵn <b>1 default VPC</b> do AWS tạo, dải <code>172.31.0.0/16</code>, mọi subnet đều public, có sẵn IGW và route ra Internet.</li><li>Mục đích: bấm Launch instance là chạy được ngay, không cần biết mạng. Tạo EC2 mà không chọn VPC thì máy rơi vào đây.</li><li>Công ty không dùng cho hệ thống thật: không có chỗ kín để đặt database, và dải IP trùng ở mọi tài khoản nên không nối VPC được.</li><li>Để nguyên, không tốn tiền. Lỡ xoá thì <b>Actions → Create default VPC</b>.</li></ul><div class="callout warn"><b>Không thấy VPC của mình?</b><div>VPC thuộc về <b>từng region</b>. Console hay tự nhảy về N. Virginia khi mở IAM hay Billing. Mất tài nguyên thì nhìn region ở góc trên bên phải trước tiên.</div></div>' },
     ] },
-  { id: 'subnets', group: 'VPC · Virtual private cloud', title: 'Subnets',
+  { id: 'subnets', group: 'VPC › Virtual private cloud', title: 'Subnets',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Một khúc dải IP cắt ra từ VPC, nằm cố định ở 1 AZ, kèm 1 route table và 1 NACL.',
     sections: [
       { h: 'Subnet là gì', html: '<pre><code>VPC        10.0.0.0/16   → 10.0.0.0 … 10.0.255.255  (65.536 địa chỉ)\nsubnet A   10.0.1.0/24   → 10.0.1.0 … 10.0.1.255    (256 địa chỉ)\nsubnet B   10.0.2.0/24   → 10.0.2.0 … 10.0.2.255</code></pre><ul><li>Phải nằm gọn trong dải của VPC, các subnet không được chồng nhau.</li><li>AWS giữ lại <b>5 địa chỉ</b> mỗi subnet, nên <code>/24</code> còn 251 IP dùng được.</li><li>Ví von: VPC là toà nhà, subnet là từng tầng.</li></ul>' },
@@ -234,7 +234,7 @@ const PAGES = [
       { h: 'Trong console', html: '<ul><li><b>Create subnet</b>: chọn VPC, AZ, dải IP.</li><li><b>Actions → Edit subnet settings → Enable auto-assign public IPv4</b>: máy mới tạo trong subnet tự có public IP.</li><li>Tab <b>Route table</b> và <b>Network ACL</b> của subnet cho biết nó đang dùng cái nào.</li></ul>' },
       { h: 'Bố cục thường gặp', html: '<pre><code>VPC 10.0.0.0/16\n├─ public-1a   10.0.1.0/24   (AZ a)  → load balancer\n├─ public-1c   10.0.2.0/24   (AZ c)  → load balancer\n├─ private-1a  10.0.11.0/24  (AZ a)  → web, database\n└─ private-1c  10.0.12.0/24  (AZ c)  → web, database</code></pre>' },
     ] },
-  { id: 'route-table', group: 'VPC · Virtual private cloud', title: 'Route tables',
+  { id: 'route-table', group: 'VPC › Virtual private cloud', title: 'Route tables',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Bảng chỉ đường cho gói tin đi ra khỏi subnet. Subnet là "public" vì route table của nó có đường ra Internet Gateway, không phải vì tên.',
     sections: [
       { h: 'Hai dòng của hoc-rtb-public', html: '<div class="tablewrap"><table><thead><tr><th>Destination</th><th>Target</th><th>Đọc thành lời</th></tr></thead><tbody><tr><td><code>10.0.0.0/16</code></td><td><code>local</code></td><td>Gửi tới máy trong VPC thì <b>đi nội bộ</b>. Dòng này AWS không cho xoá.</td></tr><tr><td><code>0.0.0.0/0</code></td><td><code>igw-…</code></td><td>Gửi tới <b>mọi địa chỉ còn lại</b> (Internet) thì đi qua Internet Gateway.</td></tr></tbody></table></div>' },
@@ -249,58 +249,58 @@ const PAGES = [
       { h: 'Private subnet', html: '<p>Route table của private subnet chỉ có dòng <code>local</code> (và đường tắt tới S3 qua VPC endpoint). Không có đường ra Internet, nên dù máy có public IP thì người ngoài vẫn không vào được. Đó là lý do database luôn đặt ở private subnet.</p>' },
       { h: 'Gắn vào subnet thế nào', html: '<ul><li>Mỗi subnet có đúng 1 route table. Một route table dùng chung được cho nhiều subnet.</li><li>Subnet không gắn rõ thì dùng <b>main route table</b> của VPC (gắn ngầm, dễ quên).</li><li>Bẫy: thêm <code>0.0.0.0/0 → igw</code> vào main route table là mọi subnet chưa gắn rõ bỗng thành public, kể cả subnet chứa database.</li><li>Sửa một route table dùng chung thì mọi subnet gắn vào nó đổi theo, có hiệu lực ngay.</li></ul>' },
     ] },
-  { id: 'internet-gateways', group: 'VPC · Virtual private cloud', title: 'Internet gateways',
+  { id: 'internet-gateways', group: 'VPC › Virtual private cloud', title: 'Internet gateways',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Cổng nối VPC với Internet, và là chỗ đổi IP private ↔ public. Miễn phí.',
     sections: [
       { h: 'Là gì', html: '<ul><li>Mỗi VPC gắn được <b>tối đa 1</b> Internet Gateway.</li><li>Tạo ra rồi phải <b>Attach to VPC</b>, sau đó thêm route <code>0.0.0.0/0 → igw</code> vào route table của subnet public. Thiếu một trong hai thì vẫn không ra được Internet.</li><li>Bản thân IGW không tốn tiền. Dữ liệu gửi ra Internet thì tính theo GB.</li></ul>' },
       { h: 'Hai loại IP', html: '<div class="tablewrap"><table><thead><tr><th></th><th>Private IP <code>10.0.3.176</code></th><th>Public IP <code>52.x.x.x</code></th></tr></thead><tbody><tr><td>Ai cấp</td><td><b>Subnet</b></td><td><b>AWS</b>, từ kho IP công khai, khi bật Auto-assign public IP</td></tr><tr><td>Giống</td><td>Số máy lẻ trong công ty</td><td>Số điện thoại thật</td></tr><tr><td>Duy nhất</td><td>Chỉ trong một VPC. VPC khác dùng trùng cũng được (trừ khi nối 2 VPC với nhau)</td><td>Trên toàn Internet</td></tr><tr><td>Máy có thấy không</td><td>Có (<code>ip a</code>)</td><td><b>Không</b>. Nó nằm ở Internet Gateway</td></tr></tbody></table></div>' },
       { h: 'Internet Gateway ghép cặp hai IP', html: '<pre><code>Gọi 52.x.x.x  →  IGW đổi thành 10.0.3.176  →  EC2 nhận\nEC2 trả lời từ 10.0.3.176  →  IGW đổi lại 52.x.x.x  →  Internet</code></pre><p>Cách đổi địa chỉ này gọi là NAT. Router wifi ở nhà cũng làm đúng việc đó. Stop rồi Start máy thì public IP đổi; muốn giữ cố định thì dùng Elastic IP (tính tiền khoảng 0,005 USD/giờ).</p>' },
     ] },
-  { id: 'egress-only-igw', group: 'VPC · Virtual private cloud', title: 'Egress-only internet gateways',
+  { id: 'egress-only-igw', group: 'VPC › Virtual private cloud', title: 'Egress-only internet gateways',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Giống NAT nhưng cho IPv6: cho máy gọi ra, chặn chiều vào.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>IPv6 không có địa chỉ private, mọi máy đều có IP công khai. Muốn máy IPv6 gọi ra Internet mà người ngoài không gọi vào được thì dùng cái này.</li><li>Bài lab chỉ dùng IPv4, nên chưa cần.</li></ul>' },
     ] },
-  { id: 'carrier-gateways', group: 'VPC · Virtual private cloud', title: 'Carrier gateways',
+  { id: 'carrier-gateways', group: 'VPC › Virtual private cloud', title: 'Carrier gateways',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Dùng với AWS Wavelength: máy đặt ngay trong mạng 5G của nhà mạng.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>App cần độ trễ cực thấp tới điện thoại (game, xe tự lái). Hiếm gặp, gặp thì tra.</li></ul>' },
     ] },
-  { id: 'dhcp-options', group: 'VPC · Virtual private cloud', title: 'DHCP option sets',
+  { id: 'dhcp-options', group: 'VPC › Virtual private cloud', title: 'DHCP option sets',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Cấu hình DNS server và tên miền nội bộ mà VPC cấp cho máy.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Mặc định máy dùng DNS của AWS (Route 53 Resolver), tên kiểu <code>ip-10-0-3-176.ap-northeast-1.compute.internal</code>.</li><li>Chỉ đổi khi công ty có DNS riêng (Active Directory). Gần như luôn để mặc định.</li></ul>' },
     ] },
-  { id: 'elastic-ips', group: 'VPC · Virtual private cloud', title: 'Elastic IPs',
+  { id: 'elastic-ips', group: 'VPC › Virtual private cloud', title: 'Elastic IPs',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Public IP cố định, giữ nguyên khi Stop/Start máy.',
     sections: [
       { h: 'Vì sao cần', html: '<ul><li>Public IP tự cấp sẽ <b>đổi</b> mỗi lần Stop rồi Start. Tên miền, cấu hình đối tác trỏ vào IP cũ sẽ hỏng.</li><li>Elastic IP thuộc về tài khoản của bạn, gắn vào máy nào thì máy đó dùng IP đó, gỡ ra gắn sang máy khác được.</li></ul>' },
       { h: 'Tiền', html: '<div class="callout warn"><b>Tính tiền khoảng 0,005 USD/giờ</b><div>Mọi public IPv4 đều tính tiền, kể cả IP đang <b>không gắn</b> vào máy nào. Không dùng nữa thì <b>Release</b>, không chỉ Disassociate.</div></div>' },
       { h: 'Trong console', html: '<ul><li><b>Allocate Elastic IP address</b> → <b>Actions → Associate</b> → chọn instance.</li><li>Học ở <a href="#bai-8">bài 8</a>.</li></ul>' },
     ] },
-  { id: 'prefix-lists', group: 'VPC · Virtual private cloud', title: 'Managed prefix lists',
+  { id: 'prefix-lists', group: 'VPC › Virtual private cloud', title: 'Managed prefix lists',
     lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc dựng</span> Gom nhiều dải IP thành một danh sách có tên, dùng lại trong route và Security Group.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Ví dụ: danh sách IP văn phòng có 5 dải. Thay vì viết 5 rule ở 10 Security Group, tạo một prefix list rồi trỏ vào. Đổi một chỗ, mọi nơi cập nhật.</li><li>AWS có sẵn prefix list cho S3, CloudFront (<code>pl-…</code>). Dòng S3 trong route table chính là một prefix list.</li></ul>' },
     ] },
-  { id: 'nat-gateways', group: 'VPC · Virtual private cloud', title: 'NAT gateways',
+  { id: 'nat-gateways', group: 'VPC › Virtual private cloud', title: 'NAT gateways',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Cho máy ở private subnet gọi ra Internet (apt, gọi API) mà Internet không gọi vào được.',
     sections: [
       { h: 'Cách chạy', html: '<pre><code>Máy private 10.0.11.5 → route 0.0.0.0/0 → NAT (ở public subnet, có Elastic IP)\n → IGW → Internet\nTrả lời quay về NAT → NAT chuyển lại cho 10.0.11.5</code></pre><ul><li>NAT phải đặt ở <b>public subnet</b>, vì nó cũng cần đi ra IGW.</li><li>Route table của <b>private subnet</b> trỏ <code>0.0.0.0/0 → nat-…</code>.</li><li>Người ngoài không có địa chỉ nào để gọi vào máy private, nên chiều vào bị chặn tự nhiên.</li></ul>' },
       { h: 'Tiền', html: '<div class="callout bad"><b>Tốn tiền nhất trong VPC</b><div>Khoảng 0,062 USD/giờ (khoảng 45 USD/tháng) cộng phí theo GB đi qua. Học xong <b>xoá ngay</b>, rồi Release Elastic IP của nó.</div></div><p>Thay thế rẻ hơn: dùng <a href="#endpoints">VPC endpoint</a> nếu chỉ cần gọi S3 hay dịch vụ AWS.</p>' },
       { h: 'Học ở', html: '<ul><li><a href="#bai-5">Bài 5</a>: private subnet + NAT + Session Manager.</li></ul>' },
     ] },
-  { id: 'peering', group: 'VPC · Virtual private cloud', title: 'Peering connections',
+  { id: 'peering', group: 'VPC › Virtual private cloud', title: 'Peering connections',
     lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc dựng</span> Nối 2 VPC với nhau bằng đường private.',
     sections: [
       { h: 'Cách chạy', html: '<ul><li>Tạo kết nối, bên kia Accept, rồi mỗi bên thêm route trỏ dải IP bên kia sang <code>pcx-…</code>.</li><li>Dải IP 2 bên <b>không được trùng</b>. Đây là lý do phải quy hoạch IP từ đầu.</li><li>Không bắc cầu: A nối B, B nối C thì A vẫn <b>không</b> tới được C. Nhiều VPC thì dùng <a href="#transit-gateways">Transit gateway</a>.</li><li>Học ở <a href="#bai-7">bài 7</a>.</li></ul>' },
     ] },
-  { id: 'route-servers', group: 'VPC · Virtual private cloud', title: 'Route servers',
+  { id: 'route-servers', group: 'VPC › Virtual private cloud', title: 'Route servers',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Trao đổi route động (BGP) với thiết bị mạng đặt trong VPC.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Khi chạy firewall ảo hay router của hãng khác trong VPC và muốn route tự cập nhật khi thiết bị đó hỏng. Hiếm gặp.</li></ul>' },
     ] },
-  { id: 'security-groups', group: 'VPC · Security', title: 'Security groups',
+  { id: 'security-groups', group: 'VPC › Security', title: 'Security groups',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Firewall gắn vào card mạng của từng máy. Chỉ có rule cho phép, và nhớ chiều về.',
     sections: [
       { h: 'Là gì', html: '<ul><li>Gắn vào <b>card mạng của EC2</b> (cả RDS, ALB…), cấu hình trên AWS console, không nằm trong Linux.</li><li>Gói tin bị chặn thì không bao giờ chạm tới máy.</li><li>Một SG gắn được cho nhiều máy, một máy gắn được nhiều SG. Sửa SG thì mọi máy dùng nó đổi theo ngay.</li></ul><div class="tablewrap"><table><thead><tr><th>Lớp</th><th>Phạm vi</th><th>Cấu hình ở đâu</th></tr></thead><tbody><tr><td><code>ufw</code> / <code>iptables</code></td><td>1 máy, bên trong OS</td><td>SSH vào máy</td></tr><tr><td><b>Security Group</b></td><td>Từng máy, bên ngoài OS</td><td>AWS console</td></tr><tr><td>NACL</td><td>Cả subnet</td><td>AWS console</td></tr></tbody></table></div>' },
@@ -308,7 +308,7 @@ const PAGES = [
       { h: 'Source "My IP" là ghi cứng', html: '<div class="callout warn"><b>Không tự cập nhật</b><div>Chọn <b>My IP</b> thì AWS lấy IP lúc đó và ghi thành <code>x.x.x.x/32</code>. IP nhà đổi thì SSH <b>timeout</b>. Sửa: Edit inbound rules → chọn lại My IP.</div></div><ul><li>Đừng mở cổng 22 cho <code>0.0.0.0/0</code>: bot dò mật khẩu cả ngày.</li><li>Cách không cần mở cổng 22: Session Manager (bài 5).</li></ul>' },
       { h: 'Source là một SG khác', html: '<ul><li>Rule của <code>db-sg</code>: cho cổng 3306 từ <b>source = <code>app-sg</code></b>. Nghĩa là mọi máy gắn <code>app-sg</code> gọi được DB, không cần biết IP. Máy app thêm hay bớt thì rule vẫn đúng.</li><li>Đây là cách công ty viết SG trong hệ thống thật. Học ở <a href="#bai-3">bài 3</a>.</li></ul>' },
     ] },
-  { id: 'network-acls', group: 'VPC · Security', title: 'Network ACLs',
+  { id: 'network-acls', group: 'VPC › Security', title: 'Network ACLs',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Firewall ở cửa subnet. Có rule chặn, xét theo số thứ tự, không nhớ chiều về.',
     sections: [
       { h: 'Khác Security Group', html: '<div class="tablewrap"><table><thead><tr><th></th><th>Security Group</th><th>NACL</th></tr></thead><tbody><tr><td>Gắn vào</td><td>Từng máy</td><td>Cả subnet</td></tr><tr><td>Rule chặn (Deny)</td><td>Không có</td><td>Có</td></tr><tr><td>Thứ tự xét</td><td>Xét hết, có rule cho là được</td><td>Theo số (100, 200…), khớp rule nào dừng ở đó</td></tr><tr><td>Nhớ chiều về</td><td>Có (stateful)</td><td>Không (stateless)</td></tr></tbody></table></div>' },
@@ -316,78 +316,97 @@ const PAGES = [
       { h: 'Bẫy', html: '<ul><li><b>Ephemeral port</b>: mở inbound 80 mà outbound không cho <code>1024-65535</code> thì gói trả lời bị rớt, web timeout.</li><li><b>Thứ tự</b>: <code>100 ALLOW ALL</code> đặt trước <code>200 DENY …</code> thì rule chặn không bao giờ chạy tới.</li><li><b>NACL mặc định</b> cho hết; <b>NACL tự tạo mới</b> thì chặn hết. Gắn NACL mới vào subnet là mọi thứ trong đó timeout ngay.</li></ul>' },
       { h: 'Thực tế', html: '<ul><li>Đa số công ty để NACL mặc định, chặn bằng Security Group.</li><li>Dùng NACL khi cần chặn hẳn một dải IP, vì SG không có Deny.</li><li>Học ở <a href="#bai-4">bài 4</a>.</li></ul>' },
     ] },
-  { id: 'block-public-access', group: 'VPC · Security', title: 'Block Public Access',
+  { id: 'block-public-access', group: 'VPC › Security', title: 'Block Public Access',
     lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc vận hành</span> Một công tắc chặn mọi đường Internet vào/ra VPC, kể cả khi route có IGW.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Công ty muốn chắc chắn một VPC (dữ liệu nhạy cảm) không bao giờ ra Internet, dù ai đó lỡ thêm route hay mở SG.</li><li>Có thể chặn hai chiều, hoặc chỉ chặn chiều vào. Có ngoại lệ cho từng subnet.</li></ul>' },
     ] },
-  { id: 'endpoints', group: 'VPC · PrivateLink', title: 'Endpoints',
+  { id: 'endpoints', group: 'VPC › PrivateLink', title: 'Endpoints',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Gọi dịch vụ AWS (S3, SSM, ECR…) bằng đường private, không qua Internet hay NAT.',
     sections: [
       { h: 'Hai loại', html: '<div class="tablewrap"><table><thead><tr><th></th><th>Gateway endpoint</th><th>Interface endpoint</th></tr></thead><tbody><tr><td>Dùng cho</td><td>Chỉ <b>S3</b> và <b>DynamoDB</b></td><td>Hầu hết dịch vụ khác (SSM, ECR, Secrets Manager…)</td></tr><tr><td>Cách chạy</td><td>Thêm một dòng vào route table (<code>pl-… → vpce-…</code>)</td><td>Tạo card mạng có IP private trong subnet</td></tr><tr><td>Tiền</td><td><b>Miễn phí</b></td><td>Khoảng 0,014 USD/giờ mỗi AZ + phí theo GB</td></tr></tbody></table></div>' },
       { h: 'Vì sao cần', html: '<ul><li>Máy ở private subnet gọi S3 mà không cần NAT (đỡ khoảng 45 USD/tháng).</li><li>Dữ liệu không đi qua Internet: an toàn hơn, và gửi S3 qua gateway endpoint không mất phí NAT.</li><li>Wizard tạo <code>hoc-vpc</code> đã tự tạo sẵn S3 gateway endpoint.</li><li>Học ở <a href="#bai-7">bài 7</a>.</li></ul>' },
     ] },
-  { id: 'endpoint-services', group: 'VPC · PrivateLink', title: 'Endpoint services',
+  { id: 'endpoint-services', group: 'VPC › PrivateLink', title: 'Endpoint services',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Chia sẻ dịch vụ của mình cho VPC tài khoản khác qua PrivateLink.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Bạn làm SaaS, khách hàng muốn gọi API của bạn bằng đường private từ VPC của họ. Đặt dịch vụ sau một NLB rồi tạo endpoint service.</li></ul>' },
     ] },
-  { id: 'lattice', group: 'VPC · PrivateLink', title: 'Lattice services và networks',
+  { id: 'lattice', group: 'VPC › PrivateLink', title: 'Lattice services và networks',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Cho các service ở nhiều VPC, nhiều tài khoản gọi nhau mà không cần peering.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Hệ thống microservice lớn trải trên nhiều tài khoản. Lattice lo việc nối mạng, phân quyền giữa các service. Hiếm gặp ở giai đoạn này.</li></ul>' },
     ] },
-  { id: 'flow-logs', group: 'VPC · Network Analysis', title: 'Flow logs',
+  { id: 'flow-logs', group: 'VPC › Network Analysis', title: 'Flow logs',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc vận hành</span> Ghi lại từng kết nối: ai gọi ai, cổng nào, ACCEPT hay REJECT. Không nằm ở menu trái mà ở tab Flow logs của VPC, subnet hoặc card mạng.',
     sections: [
       { h: 'Đọc một dòng', html: '<pre><code>2 1234… eni-0ab… 14.x.x.x 10.0.3.176 51234 22 6 3 180 … REJECT OK\n          nguồn      đích     cổng nguồn/đích  TCP          kết quả</code></pre>' },
       { h: 'Soi timeout bằng flow log', html: '<div class="tablewrap"><table><thead><tr><th>Thấy gì</th><th>Nghĩa là</th></tr></thead><tbody><tr><td><code>REJECT</code> ở chiều vào</td><td>Security Group hoặc NACL chặn</td></tr><tr><td>Chiều vào <code>ACCEPT</code>, chiều ra <code>REJECT</code></td><td>NACL outbound chặn (thường là ephemeral port)</td></tr><tr><td>Không có dòng nào</td><td>Gói tin không tới được card mạng: thiếu route, thiếu public IP, hoặc gõ sai IP</td></tr></tbody></table></div>' },
       { h: 'Tiền và cách bật', html: '<ul><li>Gửi về CloudWatch Logs hoặc S3. Tính tiền theo lượng log, lab nhỏ chỉ vài cent.</li><li>VPC → chọn VPC → tab <b>Flow logs</b> → Create. Học ở <a href="#bai-6">bài 6</a>.</li></ul>' },
     ] },
-  { id: 'reachability', group: 'VPC · Network Analysis', title: 'Reachability Analyzer',
+  { id: 'reachability', group: 'VPC › Network Analysis', title: 'Reachability Analyzer',
     lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc vận hành</span> Hỏi "máy A tới được máy B cổng 80 không?". Nó chỉ ra lớp nào chặn.',
     sections: [
       { h: 'Cách dùng', html: '<ul><li>Chọn nguồn (Internet gateway, instance…), đích, cổng. Công cụ đọc cấu hình SG, NACL, route rồi trả lời Reachable hoặc chỉ ra đúng thành phần chặn.</li><li>Không gửi gói tin thật, chỉ phân tích cấu hình. Khoảng 0,1 USD mỗi lần chạy.</li><li>Khác Flow logs: Reachability nói <b>cấu hình có cho phép không</b>; Flow logs nói <b>gói tin thật đã đi thế nào</b>.</li></ul>' },
     ] },
-  { id: 'access-analyzer', group: 'VPC · Network Analysis', title: 'Network Access Analyzer',
+  { id: 'access-analyzer', group: 'VPC › Network Analysis', title: 'Network Access Analyzer',
     lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc vận hành</span> Quét cả VPC tìm đường hở ngoài ý muốn.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Kiểm tra định kỳ: có database nào lộ ra Internet không, có máy nào ở môi trường dev gọi được prod không. Dùng khi audit bảo mật.</li></ul>' },
     ] },
-  { id: 'traffic-mirroring', group: 'VPC · Network Analysis', title: 'Traffic Mirroring',
+  { id: 'traffic-mirroring', group: 'VPC › Network Analysis', title: 'Traffic Mirroring',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc vận hành</span> Sao chép gói tin của một máy sang máy khác để phân tích sâu.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Điều tra bảo mật hay lỗi giao thức cần xem nội dung gói tin (như Wireshark). Hiếm dùng.</li></ul>' },
     ] },
-  { id: 'site-to-site-vpn', group: 'VPC · VPN', title: 'Site-to-Site VPN',
+  { id: 'site-to-site-vpn', group: 'VPC › VPN', title: 'Site-to-Site VPN',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Nối mạng văn phòng hoặc datacenter của công ty vào VPC qua đường hầm mã hoá.',
     sections: [
       { h: 'Gồm', html: '<ul><li><b>Customer gateway</b>: khai báo router phía văn phòng.</li><li><b>Virtual private gateway</b>: cổng phía VPC.</li><li><b>Site-to-Site VPN connection</b>: đường hầm nối hai đầu. Khoảng 0,05 USD/giờ.</li></ul>' },
     ] },
-  { id: 'client-vpn', group: 'VPC · VPN', title: 'Client VPN endpoints',
+  { id: 'client-vpn', group: 'VPC › VPN', title: 'Client VPN endpoints',
     lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc dựng</span> Cho nhân viên cài app VPN trên laptop để vào mạng private của VPC.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Dev cần vào database ở private subnet từ máy mình mà không mở ra Internet. Tốn khoảng 0,1 USD/giờ mỗi subnet gắn vào, cộng phí mỗi người kết nối. Lab nhỏ dùng Session Manager rẻ hơn.</li></ul>' },
     ] },
-  { id: 'transit-gateways', group: 'VPC · Transit gateways', title: 'Transit gateways',
+  { id: 'transit-gateways', group: 'VPC › Transit gateways', title: 'Transit gateways',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Trạm trung tâm nối nhiều VPC và VPN với nhau.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Có hàng chục VPC: peering từng cặp không quản nổi. Mọi VPC nối vào transit gateway, route ở một chỗ.</li><li>Khoảng 0,07 USD/giờ mỗi VPC gắn vào, cộng phí theo GB.</li></ul>' },
     ] },
-  { id: 'ipam', group: 'VPC · Khác', title: 'IPAM',
+  { id: 'ipam', group: 'VPC › Khác', title: 'IPAM',
     lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Quản lý dải IP cho cả công ty, tránh hai VPC dùng trùng dải.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li>Công ty có nhiều tài khoản, nhiều VPC. IPAM cấp dải IP tự động và cảnh báo khi trùng.</li></ul>' },
     ] },
-  { id: 'firewalls', group: 'VPC · Khác', title: 'DNS firewall và Network Firewall',
+  { id: 'firewalls', group: 'VPC › Khác', title: 'DNS firewall và Network Firewall',
     lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc vận hành</span> Chặn tên miền độc hại, lọc gói tin sâu hơn Security Group.',
     sections: [
       { h: 'Khi nào cần', html: '<ul><li><b>DNS firewall</b>: chặn máy trong VPC phân giải các tên miền xấu (malware gọi về).</li><li><b>Network Firewall</b>: lọc theo nội dung, tên miền, chữ ký tấn công. Đắt (khoảng 0,4 USD/giờ). Dùng ở công ty có yêu cầu bảo mật cao.</li></ul>' },
     ] },
 
   // ---------- EC2 ----------
-  { id: 'ec2', group: 'EC2', title: 'Tạo EC2 Ubuntu + nginx',
-    lead: 'EC2 là máy chủ ảo thuê theo giờ. VPC là mạng, EC2 là máy cắm vào mạng đó.',
+  { id: 'ec2-console', group: 'EC2 › Tổng quan', title: 'Bản đồ menu EC2 console', vc: true,
+    lead: 'Đi theo đúng thứ tự menu bên trái của EC2 console. VPC là mạng, EC2 là máy cắm vào mạng đó.',
+    sections: [
+      { h: 'Đọc bảng thế nào', html: '<div class="vc-filter" role="group" aria-label="Lọc">' + VC_FILTERS.map(([k, t], i) => `<button type="button" data-f="${k}"${i ? '' : ' class="on"'}>${t}</button>`).join('') + '</div>' },
+      { h: 'Thứ tự đề xuất', html: '<ol class="vc-order"><li><b>Key Pairs</b>: tạo chìa SSH trước.</li><li><b>AMIs</b> + <b>Instance Types</b>: chọn hệ điều hành và cấu hình.</li><li><b>Instances</b>: tạo máy, gắn vào subnet và Security Group bên VPC.</li><li><b>Volumes</b> + <b>Snapshots</b>: hiểu ổ đĩa, sao lưu.</li><li><b>Elastic IPs</b>: khi cần IP cố định.</li><li><b>Launch Templates</b> → <b>Target Groups</b> → <b>Load Balancers</b> → <b>Auto Scaling Groups</b>: từ 1 máy lên nhiều máy chịu tải.</li></ol>' },
+      { h: 'Tổng quan', html: '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody><tr data-d="vh" data-l="2"><td><b>Dashboard, Global View, Events</b><br><a href="#ec2-dashboard">→ Xem trang</a></td><td>Xem nhanh số máy, cảnh báo, lịch bảo trì của AWS.</td><td>Vận hành</td><td><span class="pill p2">Học sau</span></td></tr></tbody></table></div>' },
+      { h: 'Instances', html: '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody><tr data-d="dung" data-l="1"><td><b>Instances</b><br><a href="#ec2">→ Xem trang</a></td><td>Danh sách máy: tạo, Start/Stop/Terminate, kết nối.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="dung" data-l="1"><td><b>Instance Types</b><br><a href="#instance-types">→ Xem trang</a></td><td>Chọn cấu hình CPU, RAM. Ảnh hưởng thẳng tới tiền.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="dung" data-l="2"><td><b>Launch Templates</b><br><a href="#launch-templates">→ Xem trang</a></td><td>Lưu sẵn cấu hình tạo máy để dùng lại, Auto Scaling cần nó.</td><td>Dựng</td><td><span class="pill p2">Học sau</span></td></tr><tr data-d="dung" data-l="2"><td><b>Spot Requests</b><br><a href="#spot">→ Xem trang</a></td><td>Thuê máy dư của AWS, rẻ tới 90%, có thể bị thu hồi.</td><td>Dựng</td><td><span class="pill p2">Học sau</span></td></tr><tr data-d="vh" data-l="2"><td><b>Savings Plans, Reserved Instances</b><br><a href="#savings">→ Xem trang</a></td><td>Cam kết dùng 1–3 năm để được giảm giá.</td><td>Vận hành</td><td><span class="pill p2">Học sau</span></td></tr><tr data-d="dung" data-l="3"><td><b>Dedicated Hosts, Capacity Reservations</b><br><a href="#dedicated">→ Xem trang</a></td><td>Thuê nguyên máy vật lý, giữ chỗ công suất.</td><td>Dựng</td><td><span class="pill">Bỏ qua</span></td></tr></tbody></table></div>' },
+      { h: 'Images', html: '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody><tr data-d="dung" data-l="1"><td><b>AMIs, AMI Catalog</b><br><a href="#amis">→ Xem trang</a></td><td>Ảnh đĩa để tạo máy: hệ điều hành + phần mềm cài sẵn.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr></tbody></table></div>' },
+      { h: 'Elastic Block Store', html: '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody><tr data-d="dung" data-l="1"><td><b>Volumes</b><br><a href="#volumes">→ Xem trang</a></td><td>Ổ đĩa gắn vào máy.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="vh" data-l="1"><td><b>Snapshots</b><br><a href="#snapshots">→ Xem trang</a></td><td>Bản sao lưu của ổ đĩa.</td><td>Vận hành</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="vh" data-l="2"><td><b>Lifecycle Manager</b><br><a href="#lifecycle-manager">→ Xem trang</a></td><td>Tự chụp snapshot theo lịch và tự xoá bản cũ.</td><td>Vận hành</td><td><span class="pill p2">Học sau</span></td></tr></tbody></table></div>' },
+      { h: 'Network & Security', html: '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody><tr data-d="dung" data-l="1"><td><b>Security Groups, Elastic IPs</b><br><a href="#ec2-sg-eip">→ Xem trang</a></td><td>Cùng một thứ với bên VPC console, chỉ là lối vào khác.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="dung" data-l="1"><td><b>Key Pairs</b><br><a href="#key-pairs">→ Xem trang</a></td><td>Chìa khoá SSH vào máy.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="vh" data-l="2"><td><b>Network Interfaces</b><br><a href="#network-interfaces">→ Xem trang</a></td><td>Card mạng ảo (ENI) của máy, nơi gắn IP và Security Group.</td><td>Vận hành</td><td><span class="pill p2">Học sau</span></td></tr><tr data-d="dung" data-l="3"><td><b>Placement Groups</b><br><a href="#placement-groups">→ Xem trang</a></td><td>Xếp các máy gần nhau hoặc tách xa nhau trong datacenter.</td><td>Dựng</td><td><span class="pill">Bỏ qua</span></td></tr></tbody></table></div>' },
+      { h: 'Load Balancing', html: '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody><tr data-d="dung" data-l="1"><td><b>Load Balancers</b><br><a href="#load-balancers">→ Xem trang</a></td><td>Cửa vào chung, chia request cho nhiều máy.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="dung" data-l="1"><td><b>Target Groups</b><br><a href="#target-groups">→ Xem trang</a></td><td>Danh sách máy đứng sau load balancer, kèm health check.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr><tr data-d="dung" data-l="3"><td><b>Trust Stores</b><br><a href="#trust-stores">→ Xem trang</a></td><td>Chứng chỉ để load balancer xác thực client (mTLS).</td><td>Dựng</td><td><span class="pill">Bỏ qua</span></td></tr></tbody></table></div>' },
+      { h: 'Auto Scaling', html: '<div class="tablewrap"><table class="vc"><thead><tr><th>Mục</th><th>Là gì</th><th>Dùng lúc</th><th>Mức</th></tr></thead><tbody><tr data-d="dung" data-l="1"><td><b>Auto Scaling Groups</b><br><a href="#asg">→ Xem trang</a></td><td>Tự thêm, bớt máy theo tải và tự thay máy hỏng.</td><td>Dựng</td><td><span class="pill p1">Học ngay</span></td></tr></tbody></table></div>' },
+    ] },
+  { id: 'ec2-dashboard', group: 'EC2 › Tổng quan', title: 'Dashboard, Global View, Events',
+    lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc vận hành</span> Các trang xem nhanh, không tạo gì.',
+    sections: [
+      { h: 'Mỗi trang dùng làm gì', html: '<ul><li><b>Dashboard</b>: đếm số máy, volume, Elastic IP… ở region đang chọn. Nhanh nhất để thấy có máy nào quên chưa tắt.</li><li><b>EC2 Global View</b>: đếm tài nguyên ở <b>mọi region</b>. Dùng khi nghi lỡ tạo máy ở region khác (rất hay gặp).</li><li><b>Events</b>: lịch AWS sẽ khởi động lại hay chuyển máy của bạn (scheduled events), vì phần cứng bên dưới cần bảo trì.</li></ul>' },
+      { h: 'Mẹo', html: '<div class="callout ok"><b>Kiểm tiền</b><div>Trước khi nghỉ, mở Global View: số Instances, Volumes, Elastic IPs ở các region phải đúng như bạn nghĩ.</div></div>' },
+    ] },
+  { id: 'ec2', group: 'EC2 › Instances', title: 'Instances',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> EC2 là máy chủ ảo thuê theo giây. VPC là mạng, EC2 là máy cắm vào mạng đó.',
     sections: [
       { h: 'Form Launch instance', html: ul([
         'Name <code>hoc-web-1</code>, AMI <b>Ubuntu 24.04</b> (đã quen; Amazon Linux thuộc dòng RHEL, mặc định của AWS, sẽ thử sau), <code>t3.micro</code>, Number of instances <b>1</b> (số máy giống hệt nhau tạo cùng lúc).',
@@ -397,22 +416,124 @@ const PAGES = [
         'Advanced details → <b>User data</b> (script chạy một lần lúc máy khởi động lần đầu):',
       ]) + '<pre><code>#!/bin/bash\napt update &amp;&amp; apt install -y nginx\necho "&lt;h1&gt;Xin chao tu $(hostname)&lt;/h1&gt;" &gt; /var/www/html/index.html\nsystemctl enable --now nginx</code></pre>' },
       { h: 'SSH từ nhiều nơi', html: ul(['EC2 mặc định <b>không cho đăng nhập bằng mật khẩu</b>, chỉ bằng key, nên bot không dò được. Nhưng mở cổng 22 cho mọi người vẫn bị quét liên tục.', 'Đi nhiều chỗ thì: <b>Session Manager</b> (không mở cổng 22; cần IAM role <code>AmazonSSMManagedInstanceCore</code>), hoặc VPN WireGuard, hoặc sửa lại rule "My IP" mỗi lần đổi chỗ.']) },
+      { h: 'Một instance gồm gì', html: '<div class="tablewrap"><table><thead><tr><th>Thành phần</th><th>Chọn ở đâu</th><th>Ghi chú</th></tr></thead><tbody><tr><td>Hệ điều hành</td><td>AMI</td><td>Ubuntu, Amazon Linux… <a href="#amis">→ Xem trang</a></td></tr><tr><td>CPU, RAM</td><td>Instance type</td><td><code>t3.micro</code> = 2 vCPU, 1 GiB <a href="#instance-types">→ Xem trang</a></td></tr><tr><td>Ổ đĩa</td><td>Volume EBS</td><td>Mặc định 8 GiB gp3 <a href="#volumes">→ Xem trang</a></td></tr><tr><td>Mạng</td><td>VPC, subnet, Security Group</td><td>Quyết định máy ở đâu, ai gọi được <a href="#subnets">→ Xem trang</a></td></tr><tr><td>Đăng nhập</td><td>Key pair</td><td>Chìa SSH <a href="#key-pairs">→ Xem trang</a></td></tr><tr><td>Script lúc khởi động</td><td>User data</td><td>Chạy một lần, lúc boot đầu tiên</td></tr></tbody></table></div>' },
+      { h: 'Vòng đời và tiền', html: '<div class="tablewrap"><table><thead><tr><th>Trạng thái</th><th>Máy chạy</th><th>Tính tiền máy</th><th>Tính tiền ổ đĩa, public IP</th></tr></thead><tbody><tr><td><b>running</b></td><td>Có</td><td>Có</td><td>Có</td></tr><tr><td><b>stopped</b></td><td>Không</td><td>Không</td><td><b>Vẫn có</b></td></tr><tr><td><b>terminated</b></td><td>Bị xoá</td><td>Không</td><td>Không (ổ gốc bị xoá theo mặc định)</td></tr></tbody></table></div><ul><li><b>Stop/Start</b>: máy chuyển sang phần cứng khác, <b>public IP đổi</b>, private IP giữ nguyên, ổ EBS giữ nguyên.</li><li><b>Reboot</b>: khởi động lại tại chỗ, IP không đổi.</li><li><b>Terminate</b>: xoá hẳn, không lấy lại được. Bật <i>Termination protection</i> cho máy quan trọng.</li><li>Học kỹ ở <a href="#bai-8">bài 8</a>.</li></ul>' },
+      { h: 'Kết nối vào máy', html: '<ul><li><b>SSH</b>: cần public IP, user (<code>ubuntu</code> hoặc <code>ec2-user</code>), file <code>.pem</code>, và Security Group mở cổng 22 cho IP của bạn. <a href="#key-pairs">→ Xem trang</a></li><li><b>EC2 Instance Connect</b> (nút Connect): terminal trong trình duyệt, vẫn đi qua cổng 22.</li><li><b>Session Manager</b>: không cần cổng 22, không cần public IP, cần IAM role. <a href="#bai-5">Bài 5</a>.</li></ul>' },
     ] },
-  { id: 'loi-timeout', group: 'EC2', title: 'Lỗi 1: ERR_CONNECTION_TIMED_OUT', bug: true,
+  { id: 'instance-types', group: 'EC2 › Instances', title: 'Instance Types',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Chọn cấu hình CPU, RAM, mạng. Đây là chỗ quyết định tiền nhiều nhất.',
+    sections: [
+      { h: 'Đọc tên', html: '<pre><code>t3.micro\n│└ thế hệ 3\n└ họ t (burstable)          .micro = cỡ\nm7g.large\n│ │└ g = chip Graviton (ARM, rẻ hơn ~20%)\n│ └ thế hệ 7\n└ họ m (cân bằng)</code></pre>' },
+      { h: 'Các họ hay gặp', html: '<div class="tablewrap"><table><thead><tr><th>Họ</th><th>Dùng cho</th></tr></thead><tbody><tr><td><b>t</b> (t3, t4g)</td><td>Web nhỏ, dev. Rẻ, CPU chạy được mạnh từng lúc nhờ tích <b>credit</b></td></tr><tr><td><b>m</b></td><td>Cân bằng CPU/RAM, app thông thường</td></tr><tr><td><b>c</b></td><td>Nặng CPU: xử lý ảnh, build</td></tr><tr><td><b>r</b></td><td>Nặng RAM: database, cache</td></tr><tr><td><b>g, p</b></td><td>GPU</td></tr></tbody></table></div>' },
+      { h: 'Bẫy họ t', html: '<div class="callout warn"><b>CPU credit</b><div>Máy <code>t3</code> chạy nền 10–20% CPU. Dùng nhiều hơn thì tiêu credit. Hết credit thì máy bị bóp chậm (standard), hoặc bị tính thêm tiền (unlimited, mặc định của t3). Máy chạy 100% CPU liên tục thì đổi sang họ m hoặc c.</div></div><ul><li>Đổi type: Stop máy → Actions → Instance settings → Change instance type → Start.</li></ul>' },
+    ] },
+  { id: 'launch-templates', group: 'EC2 › Instances', title: 'Launch Templates',
+    lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc dựng</span> Lưu sẵn toàn bộ form Launch instance để dùng lại.',
+    sections: [
+      { h: 'Vì sao cần', html: '<ul><li>Tạo máy mới không phải điền lại form: AMI, type, key, SG, user data đã lưu sẵn.</li><li>Có phiên bản (v1, v2…), sửa cấu hình là tạo version mới.</li><li><b>Auto Scaling Group bắt buộc dùng</b>: ASG tự tạo máy theo template. <a href="#asg">→ Xem trang</a></li><li>Học ở <a href="#bai-12">bài 12</a>.</li></ul>' },
+    ] },
+  { id: 'spot', group: 'EC2 › Instances', title: 'Spot Requests',
+    lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc dựng</span> Thuê máy đang dư của AWS, rẻ tới 70–90%.',
+    sections: [
+      { h: 'Đổi lại', html: '<ul><li>AWS cần lại máy thì báo trước <b>2 phút</b> rồi thu hồi.</li><li>Hợp với việc chạy lại được: build CI, xử lý batch, máy phụ trong Auto Scaling.</li><li>Không hợp với database hay máy duy nhất của app.</li></ul>' },
+    ] },
+  { id: 'savings', group: 'EC2 › Instances', title: 'Savings Plans và Reserved Instances',
+    lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc vận hành</span> Cam kết dùng 1 hoặc 3 năm để được giảm 30–70%.',
+    sections: [
+      { h: 'Khác nhau', html: '<div class="tablewrap"><table><thead><tr><th></th><th>Savings Plans</th><th>Reserved Instances</th></tr></thead><tbody><tr><td>Cam kết</td><td>Số tiền mỗi giờ (ví dụ 1 USD/giờ)</td><td>Một loại máy cụ thể ở một region</td></tr><tr><td>Linh hoạt</td><td>Đổi type, region, cả Lambda/Fargate</td><td>Ít</td></tr><tr><td>Hiện nay</td><td>Được khuyên dùng</td><td>Kiểu cũ</td></tr></tbody></table></div><ul><li>Chỉ mua khi đã chạy ổn định vài tháng và biết chắc mức dùng. Free plan thì chưa cần.</li></ul>' },
+    ] },
+  { id: 'dedicated', group: 'EC2 › Instances', title: 'Dedicated Hosts và Capacity Reservations',
+    lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Thuê nguyên máy vật lý, hoặc giữ chỗ công suất.',
+    sections: [
+      { h: 'Khi nào cần', html: '<ul><li><b>Dedicated Host</b>: license phần mềm tính theo máy vật lý (Windows Server, Oracle), hoặc quy định bắt không chung phần cứng với khách khác.</li><li><b>Capacity Reservation</b>: chắc chắn có máy loại X ở AZ Y khi cần (sự kiện lớn), trả tiền dù không dùng.</li></ul>' },
+    ] },
+  { id: 'amis', group: 'EC2 › Images', title: 'AMIs và AMI Catalog',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> AMI là ảnh đĩa để tạo máy: hệ điều hành và phần mềm cài sẵn.',
+    sections: [
+      { h: 'Là gì', html: '<ul><li><b>AMI Catalog</b>: chọn AMI có sẵn: Ubuntu, Amazon Linux, Windows, hoặc AMI của hãng khác trên Marketplace.</li><li><b>AMIs</b>: AMI <b>của bạn</b>. Cài xong nginx, app trên một máy, rồi <b>Actions → Image → Create image</b>, lần sau tạo máy mới từ đó là có sẵn mọi thứ.</li><li>AMI thuộc về <b>một region</b>. Muốn dùng ở region khác thì <b>Copy AMI</b>.</li></ul>' },
+      { h: 'Ubuntu hay Amazon Linux', html: '<div class="tablewrap"><table><thead><tr><th></th><th>Ubuntu</th><th>Amazon Linux 2023</th></tr></thead><tbody><tr><td>Quản lý gói</td><td><code>apt</code></td><td><code>dnf</code></td></tr><tr><td>User SSH</td><td><code>ubuntu</code></td><td><code>ec2-user</code></td></tr><tr><td>Ưu</td><td>Tài liệu nhiều, giống máy cá nhân</td><td>Cài sẵn công cụ AWS (SSM agent, CLI), AWS hỗ trợ trực tiếp</td></tr></tbody></table></div>' },
+      { h: 'Tiền và bẫy', html: '<ul><li>AMI tự tạo lưu bằng snapshot nên tốn tiền lưu trữ. Không dùng nữa thì <b>Deregister AMI</b> rồi xoá snapshot đi kèm. Chỉ Deregister thì snapshot vẫn còn và vẫn tính tiền.</li><li>AMI có chứa key, mật khẩu trong đĩa thì ai dùng AMI cũng thấy. Dọn trước khi tạo image.</li><li>Học ở <a href="#bai-10">bài 10</a>.</li></ul>' },
+    ] },
+  { id: 'volumes', group: 'EC2 › Elastic Block Store', title: 'Volumes',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> EBS volume là ổ đĩa mạng gắn vào máy. Dữ liệu nằm ở đây, không nằm trong máy.',
+    sections: [
+      { h: 'Là gì', html: '<ul><li>Mỗi máy có ít nhất 1 volume gốc (root, mặc định 8 GiB gp3). Gắn thêm volume khác được.</li><li>Volume nằm ở <b>một AZ</b>, chỉ gắn được vào máy cùng AZ.</li><li>Stop máy: volume giữ nguyên. Terminate: volume gốc bị xoá (Delete on termination), volume gắn thêm thì giữ lại.</li></ul>' },
+      { h: 'Các loại', html: '<div class="tablewrap"><table><thead><tr><th>Loại</th><th>Dùng cho</th></tr></thead><tbody><tr><td><b>gp3</b></td><td>Mặc định, đủ cho hầu hết việc. 3000 IOPS sẵn</td></tr><tr><td>io2</td><td>Database cần IOPS rất cao, đắt</td></tr><tr><td>st1, sc1</td><td>Ổ HDD, đọc ghi tuần tự dung lượng lớn, rẻ</td></tr></tbody></table></div>' },
+      { h: 'Thao tác hay gặp', html: '<ul><li><b>Tăng dung lượng</b>: Modify volume (không cần stop) → trong máy chạy <code>growpart</code> và <code>resize2fs</code> mới dùng được phần thêm.</li><li><b>Không giảm</b> được dung lượng. Muốn nhỏ hơn phải tạo volume mới rồi chép dữ liệu.</li><li>Volume <b>available</b> (không gắn vào máy nào) vẫn tính tiền. Hay sót sau khi terminate.</li><li>Instance store: một số type có ổ gắn thẳng vào máy, nhanh nhưng <b>mất dữ liệu khi stop</b>.</li><li>Học ở <a href="#bai-10">bài 10</a>.</li></ul>' },
+    ] },
+  { id: 'snapshots', group: 'EC2 › Elastic Block Store', title: 'Snapshots',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc vận hành</span> Bản sao lưu của volume, lưu trong S3 do AWS quản lý.',
+    sections: [
+      { h: 'Cách chạy', html: '<ul><li>Lần đầu chụp toàn bộ, các lần sau chỉ lưu phần thay đổi (incremental), nên rẻ.</li><li>Từ snapshot tạo lại volume ở <b>bất kỳ AZ nào</b> trong region: đây là cách chuyển dữ liệu sang AZ khác.</li><li>Copy được sang region khác để dự phòng thảm hoạ.</li><li>Chụp lúc máy đang chạy được, nhưng dữ liệu đang ghi dở có thể không trọn. Database thì dùng backup riêng của nó.</li><li>Học ở <a href="#bai-10">bài 10</a>.</li></ul>' },
+    ] },
+  { id: 'lifecycle-manager', group: 'EC2 › Elastic Block Store', title: 'Lifecycle Manager',
+    lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc vận hành</span> Tự chụp snapshot theo lịch và tự xoá bản cũ.',
+    sections: [
+      { h: 'Ví dụ', html: '<ul><li>Policy: mọi volume có tag <code>backup=daily</code> → chụp mỗi ngày 2 giờ sáng, giữ 7 bản gần nhất.</li><li>Thay cho việc tự viết cron chụp snapshot. Có thể dùng AWS Backup cho nhiều loại dịch vụ cùng lúc.</li></ul>' },
+    ] },
+  { id: 'ec2-sg-eip', group: 'EC2 › Network & Security', title: 'Security Groups và Elastic IPs',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Hai mục này trong menu EC2 chính là cùng đối tượng trong VPC console, chỉ là lối vào khác.',
+    sections: [
+      { h: 'Xem ở đâu', html: '<ul><li>Security Groups: <a href="#security-groups">trang Security groups (VPC)</a>.</li><li>Elastic IPs: <a href="#elastic-ips">trang Elastic IPs (VPC)</a>.</li><li>Sửa ở bên EC2 hay bên VPC đều ra cùng một kết quả.</li></ul>' },
+    ] },
+  { id: 'key-pairs', group: 'EC2 › Network & Security', title: 'Key Pairs',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Chìa khoá SSH vào máy. AWS giữ ổ khoá, bạn giữ chìa.',
+    sections: [
+      { h: 'Cách chạy', html: '<ul><li>Lúc tạo máy, AWS đặt <b>public key</b> (ổ khoá) vào <code>~/.ssh/authorized_keys</code> của user mặc định.</li><li>Bạn giữ <b>private key</b> (<code>.pem</code>). AWS chỉ đưa <b>một lần</b>, mất là không tải lại được.</li><li>EC2 mặc định không cho đăng nhập bằng mật khẩu, chỉ bằng key.</li></ul>' },
+      { h: 'SSH cần 4 thứ', html: '<div class="tablewrap"><table><thead><tr><th>Thứ</th><th>Ví dụ</th></tr></thead><tbody><tr><td>Địa chỉ</td><td>Public IP của máy</td></tr><tr><td>User</td><td><code>ubuntu</code> (Ubuntu), <code>ec2-user</code> (Amazon Linux)</td></tr><tr><td>Chìa</td><td><code>~/.ssh/hoc-key.pem</code>, quyền <code>chmod 400</code></td></tr><tr><td>Cửa 22 mở cho bạn</td><td>Security Group, source = IP hiện tại</td></tr></tbody></table></div><pre><code>ssh -i ~/.ssh/hoc-key.pem ubuntu@&lt;public-ip&gt;</code></pre>' },
+      { h: 'Lỗi hay gặp', html: '<div class="tablewrap"><table><thead><tr><th>Thấy</th><th>Nghĩa là</th></tr></thead><tbody><tr><td>Treo rồi <code>Connection timed out</code></td><td>Security Group chặn (IP nhà đổi), thiếu route, hoặc máy không có public IP</td></tr><tr><td><code>Permission denied (publickey)</code></td><td>Sai chìa hoặc sai user</td></tr><tr><td><code>UNPROTECTED PRIVATE KEY FILE</code></td><td>File <code>.pem</code> ai cũng đọc được, chạy <code>chmod 400</code></td></tr><tr><td><code>Connection refused</code></td><td>Tới máy rồi nhưng sshd không chạy</td></tr></tbody></table></div>' },
+      { h: 'Mất chìa thì sao', html: '<ul><li>Dùng Session Manager hay EC2 Instance Connect để vào, rồi thêm public key mới vào <code>authorized_keys</code>.</li><li>Hoặc stop máy, tháo volume gốc gắn sang máy khác để sửa file.</li></ul>' },
+    ] },
+  { id: 'network-interfaces', group: 'EC2 › Network & Security', title: 'Network Interfaces',
+    lead: '<span class="pill p2">Học sau</span> <span class="pill">Dùng lúc vận hành</span> ENI là card mạng ảo. IP, Security Group, MAC đều gắn vào ENI, không gắn vào máy.',
+    sections: [
+      { h: 'Vì sao nên biết', html: '<ul><li>Mỗi máy có ít nhất 1 ENI (eth0/ens5). Security Group thật ra gắn vào ENI.</li><li>Flow logs ghi theo ENI (<code>eni-…</code>).</li><li>Tháo ENI phụ gắn sang máy khác thì IP đi theo: một cách chuyển IP khi máy hỏng.</li><li>Load balancer, NAT gateway, endpoint đều tạo ENI trong subnet của bạn, nên chúng chiếm IP của subnet.</li></ul>' },
+    ] },
+  { id: 'placement-groups', group: 'EC2 › Network & Security', title: 'Placement Groups',
+    lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Bảo AWS đặt các máy gần nhau hay xa nhau.',
+    sections: [
+      { h: '3 kiểu', html: '<ul><li><b>Cluster</b>: dồn sát nhau trong 1 AZ, mạng cực nhanh (tính toán khoa học).</li><li><b>Spread</b>: mỗi máy trên phần cứng riêng, tránh chết cùng lúc.</li><li><b>Partition</b>: chia nhóm theo rack (Kafka, Cassandra).</li></ul>' },
+    ] },
+  { id: 'load-balancers', group: 'EC2 › Load Balancing', title: 'Load Balancers',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Cửa vào chung của app: nhận request rồi chia cho nhiều máy phía sau.',
+    sections: [
+      { h: 'Vì sao cần', html: '<ul><li>Một máy chết thì load balancer gửi sang máy khác: app không sập.</li><li>Máy app nằm ở private subnet, chỉ load balancer lộ ra Internet.</li><li>Gắn chứng chỉ HTTPS ở đây (ACM, miễn phí), máy phía sau chỉ cần HTTP.</li></ul>' },
+      { h: 'Các loại', html: '<div class="tablewrap"><table><thead><tr><th>Loại</th><th>Tầng</th><th>Dùng cho</th></tr></thead><tbody><tr><td><b>ALB</b></td><td>HTTP/HTTPS</td><td>Web, API. Chia theo đường dẫn, tên miền</td></tr><tr><td>NLB</td><td>TCP/UDP</td><td>Rất nhiều kết nối, cần IP cố định</td></tr><tr><td>GWLB</td><td>Gói tin</td><td>Chèn firewall của hãng khác</td></tr></tbody></table></div>' },
+      { h: 'Cấu tạo một ALB', html: '<pre><code>Internet → ALB (ở ≥ 2 public subnet, có SG riêng)\n  Listener :443 → rule: /api/* → target group "api"\n                       mặc định → target group "web"\n  Target group → EC2 ở private subnet (health check /health)</code></pre>' },
+      { h: 'Tiền', html: '<div class="callout warn"><b>Khoảng 0,0243 USD/giờ + phí theo lượng dùng</b><div>Để chạy cả tháng khoảng 18 USD. Học xong thì xoá.</div></div><ul><li>Học ở <a href="#bai-11">bài 11</a>.</li></ul>' },
+    ] },
+  { id: 'target-groups', group: 'EC2 › Load Balancing', title: 'Target Groups',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Danh sách máy đứng sau load balancer, kèm cách kiểm tra máy còn sống.',
+    sections: [
+      { h: 'Là gì', html: '<ul><li>Target có thể là instance, IP hay Lambda. Mỗi target nghe ở một cổng.</li><li><b>Health check</b>: ALB gọi đường dẫn (ví dụ <code>/health</code>) mỗi vài giây. Trả lỗi vài lần liên tiếp thì máy bị đánh dấu <b>unhealthy</b> và không nhận request nữa.</li><li>Security Group của máy phải cho phép <b>SG của ALB</b> vào cổng app, nếu không health check fail.</li></ul>' },
+      { h: 'Lỗi hay gặp', html: '<div class="tablewrap"><table><thead><tr><th>Thấy</th><th>Nghĩa là</th></tr></thead><tbody><tr><td><b>502</b></td><td>ALB tới được máy nhưng app trả lời hỏng hoặc đóng kết nối</td></tr><tr><td><b>503</b></td><td>Không còn target nào healthy</td></tr><tr><td><b>504</b></td><td>App trả lời quá chậm (quá idle timeout)</td></tr></tbody></table></div>' },
+    ] },
+  { id: 'trust-stores', group: 'EC2 › Load Balancing', title: 'Trust Stores',
+    lead: '<span class="pill">Bỏ qua</span> <span class="pill">Dùng lúc dựng</span> Lưu chứng chỉ CA để ALB xác thực client bằng chứng chỉ (mTLS).',
+    sections: [
+      { h: 'Khi nào cần', html: '<ul><li>API cho đối tác hay thiết bị IoT, mỗi bên có chứng chỉ riêng. Web thông thường không cần.</li></ul>' },
+    ] },
+  { id: 'asg', group: 'EC2 › Auto Scaling', title: 'Auto Scaling Groups',
+    lead: '<span class="pill p1">Học ngay</span> <span class="pill">Dùng lúc dựng</span> Giữ số máy đúng như mong muốn: tự thay máy hỏng, tự thêm máy khi tải cao.',
+    sections: [
+      { h: 'Ba con số', html: '<pre><code>min = 2      ← không bao giờ ít hơn\ndesired = 2  ← số máy đang muốn có\nmax = 6      ← không bao giờ nhiều hơn</code></pre><ul><li>ASG tạo máy từ <a href="#launch-templates">Launch Template</a>, rải đều ra các subnet ở nhiều AZ.</li><li>Gắn với target group: máy mới tự vào sau load balancer.</li></ul>' },
+      { h: 'Tự chữa và tự co giãn', html: '<ul><li>Máy fail health check thì ASG <b>terminate và tạo máy mới</b>. Vì vậy máy trong ASG phải không giữ dữ liệu riêng (stateless): dữ liệu để ở RDS, S3.</li><li><b>Target tracking</b>: giữ CPU trung bình quanh 50%, tải tăng thì thêm máy, giảm thì bớt.</li><li>Cập nhật code: <b>Instance refresh</b> thay dần từng máy theo template mới.</li><li>Học ở <a href="#bai-12">bài 12</a>.</li></ul>' },
+    ] },
+  { id: 'loi-timeout', group: 'EC2 › Thực hành và lỗi đã gặp', title: 'Lỗi 1: ERR_CONNECTION_TIMED_OUT', bug: true,
     lead: 'Trình duyệt quay một lúc lâu rồi mới báo lỗi.',
     sections: [
       { h: 'Nguyên nhân', html: ul(['Kiểm tra bằng CLI: <code>aws ec2 describe-security-groups</code> → chỉ có rule SSH 22. Rule HTTP 80 bị sót lúc tạo.', 'Security Group <b>bỏ gói tin lặng lẽ</b> (DROP), không trả lời gì. Trình duyệt không biết là bị chặn hay mạng chậm nên cứ chờ, hết giờ thì báo timeout.', 'Gói tin <b>chưa hề tới máy</b>, nên log nginx không có gì.']) },
       { h: 'Sửa', html: '<p>EC2 → Security Groups → <code>hoc-web-sg</code> → Edit <b>inbound</b> rules → Add rule HTTP, nguồn Anywhere-IPv4 → Save. Có hiệu lực ngay, không cần khởi động lại máy.</p>' },
       { h: 'Ghi nhớ', html: callout('warn', 'Timeout = không có phản hồi nào', 'Gói tin bị chặn hoặc bị lạc trên đường: Security Group, NACL, route table thiếu đường, sai IP, máy đang tắt, hoặc IP nhà đã đổi nên không còn khớp rule "My IP".') },
     ] },
-  { id: 'loi-refused', group: 'EC2', title: 'Lỗi 2: ERR_CONNECTION_REFUSED', bug: true,
+  { id: 'loi-refused', group: 'EC2 › Thực hành và lỗi đã gặp', title: 'Lỗi 2: ERR_CONNECTION_REFUSED', bug: true,
     lead: 'Báo lỗi ngay lập tức. Lỗi đổi kiểu là tin tốt: gói tin đã qua được Security Group.',
     sections: [
       { h: 'Nguyên nhân', html: ul(['Gói tin <b>tới được máy</b>, nhưng không có chương trình nào nghe cổng 80, nên hệ điều hành trả lời ngay: từ chối.', 'Kiểm tra bằng CLI: <code>aws ec2 describe-instance-attribute --attribute userData</code> → <code>None</code>. Chưa dán User data, nên nginx chưa được cài.']) },
       { h: 'Sửa', html: '<pre><code>ssh -i ~/.ssh/hoc-key.pem ubuntu@&lt;public-ip&gt;\nsudo ss -tlnp            # chưa có gì nghe :80\nsudo apt update &amp;&amp; sudo apt install -y nginx\nsystemctl status nginx   # active (running)\nsudo ss -tlnp            # đã có :80</code></pre>' },
       { h: 'Ghi nhớ', html: callout('warn', 'Refused = tới máy rồi, nhưng dịch vụ không chạy', 'Không phải lỗi quyền. Lỗi quyền là <code>Permission denied</code> (SSH sai key) hoặc <code>403 Forbidden</code>: tới được dịch vụ nhưng không được phép.') },
     ] },
-  { id: 'thi-nghiem-3', group: 'EC2', title: 'Thí nghiệm 3: xoá route ra Internet', bug: true,
+  { id: 'thi-nghiem-3', group: 'EC2 › Thực hành và lỗi đã gặp', title: 'Thí nghiệm 3: xoá route ra Internet', bug: true,
     lead: 'Tự tay phá để thấy route table quan trọng thế nào.',
     sections: [
       { h: 'Làm gì', html: ul(['VPC → Route tables → <code>hoc-rtb-public</code> → Routes → Edit routes → <b>Remove</b> dòng <code>0.0.0.0/0 → igw</code> → Save.']) },
@@ -420,7 +541,7 @@ const PAGES = [
       { h: 'Phân biệt với lỗi 1', html: '<div class="tablewrap"><table><thead><tr><th></th><th>Dừng ở</th><th>Tới được nginx chưa</th><th>Log nginx</th></tr></thead><tbody><tr><td>Lỗi 1 (thiếu rule 80)</td><td>Security Group, chiều vào</td><td>Chưa</td><td>Không có dòng nào</td></tr><tr><td>Thí nghiệm 3 (xoá route)</td><td>Route table, chiều về</td><td>Rồi</td><td>Có dòng request</td></tr></tbody></table></div><p>Cả hai đều timeout. Muốn phân biệt thì xem log. Nhưng lúc mất route thì SSH cũng không vào được, nên phải dùng Session Manager hoặc VPN.</p>' },
       { h: 'Trả lại', html: '<p>Edit routes → Add route → Destination <code>0.0.0.0/0</code>, Target <b>Internet Gateway</b> → <code>hoc-igw</code> → Save.</p>' },
     ] },
-  { id: 'deploy', group: 'EC2', title: 'Deploy trang này lên EC2 (đường dẫn con)',
+  { id: 'deploy', group: 'EC2 › Thực hành và lỗi đã gặp', title: 'Deploy trang này lên EC2 (đường dẫn con)',
     lead: 'Mỗi project một thư mục và một file cấu hình nginx riêng. Trang gốc "/" để dành cho project chính.',
     sections: [
       { h: 'Cấu trúc thư mục', html: '<pre><code>/var/www/html/                           # trang gốc "/"\n/var/www/sites/hoc-ha-tang/              # repo lep7405/hoc-ha-tang (git clone)\n/etc/nginx/snippets/hoc-ha-tang.conf     # cấu hình nginx riêng</code></pre>' },
@@ -428,7 +549,7 @@ const PAGES = [
       { h: 'Cập nhật', html: '<pre><code>*/10 * * * * git -C /var/www/sites/hoc-ha-tang pull -q --ff-only</code></pre><p>Cron của user <code>ubuntu</code> tự kéo bản mới 10 phút một lần. File tĩnh nên không cần reload nginx. Không mở SSH cho GitHub Actions vào EC2 lab; bản chạy lâu dài ở VPS do Actions deploy.</p>' },
       { h: 'Repo cũ', html: ul(['Trước 26/11 trang này ở repo <code>aws-hoc-setup</code> (nay đã archive). Đường dẫn cũ <code>/aws-hoc-setup/</code> trên EC2 được chuyển hướng 301 sang <code>/hoc-ha-tang/aws/</code>.', 'Terminate EC2 thì mất hết, phải dựng lại theo trang này.']) },
     ] },
-  { id: 'don-dep', group: 'EC2', title: 'Thí nghiệm tiếp theo và dọn dẹp',
+  { id: 'don-dep', group: 'EC2 › Thực hành và lỗi đã gặp', title: 'Thí nghiệm tiếp theo và dọn dẹp',
     lead: 'Mỗi lần chỉ phá một thứ, đoán trước rồi mới thử.',
     sections: [
       { h: 'Còn lại', html: ul(['Tạo máy ở private subnet có bật public IP: vào được không?', 'Tạo máy ở public subnet nhưng tắt public IP.', 'Đổi rule SSH sang một IP sai.']) },
@@ -570,11 +691,22 @@ const sidebar = document.getElementById('sidebar');
 let collapsed = {};
 try { collapsed = JSON.parse(localStorage.getItem('nav-collapsed') || '{}'); } catch (_) {}
 const saveCollapsed = () => { try { localStorage.setItem('nav-collapsed', JSON.stringify(collapsed)); } catch (_) {} };
-sidebar.innerHTML = groups.map((g, gi) => {
+const groupHtml = (g, gi, label) => {
   const items = PAGES.filter((p) => p.group === g);
   return `<div class="group${collapsed[g] ? ' closed' : ''}" data-group="${g}">
-    <button class="ghead" aria-expanded="${!collapsed[g]}" aria-controls="g${gi}"><span class="chev">›</span>${g}<span class="cnt">${items.length}</span></button>
+    <button class="ghead" aria-expanded="${!collapsed[g]}" aria-controls="g${gi}"><span class="chev">›</span>${label}<span class="cnt">${items.length}</span></button>
     <div class="gitems" id="g${gi}">${items.map((p) => `<a href="#${p.id}" data-id="${p.id}">${p.bug ? '<span class="dot" title="Có lỗi đã gặp"></span>' : ''}${p.title}</a>`).join('')}</div>
+  </div>`;
+};
+// Nhóm "VPC › Security" nằm trong nhóm cha "VPC"
+const tops = [...new Set(groups.map((g) => g.split(' › ')[0]))];
+sidebar.innerHTML = tops.map((t, ti) => {
+  const subs = groups.filter((g) => g.startsWith(t + ' › '));
+  if (!subs.length) return groupHtml(t, groups.indexOf(t), t);
+  const n = PAGES.filter((p) => p.group.startsWith(t + ' › ')).length;
+  return `<div class="group parent${collapsed[t] ? ' closed' : ''}" data-group="${t}">
+    <button class="ghead" aria-expanded="${!collapsed[t]}" aria-controls="t${ti}"><span class="chev">›</span>${t}<span class="cnt">${n}</span></button>
+    <div class="gitems" id="t${ti}">${subs.map((g) => groupHtml(g, groups.indexOf(g), g.split(' › ')[1])).join('')}</div>
   </div>`;
 }).join('');
 sidebar.addEventListener('click', (e) => {
@@ -599,8 +731,10 @@ function render() {
   document.getElementById('onpage').innerHTML = '<h5>☰ Trên trang này</h5>' + p.sections.map((s) => `<a href="#${p.id}--${slug(s.h)}">${s.h}</a>`).join('');
   sidebar.querySelectorAll('a').forEach((a) => a.classList.toggle('active', a.dataset.id === p.id));
   // nhóm chứa trang đang xem luôn mở
-  const cur = sidebar.querySelector(`.group[data-group="${p.group}"]`);
-  if (cur && cur.classList.contains('closed')) { cur.classList.remove('closed'); cur.querySelector('.ghead').setAttribute('aria-expanded', 'true'); collapsed[p.group] = false; saveCollapsed(); }
+  for (const g of [p.group.split(' › ')[0], p.group]) {
+    const cur = sidebar.querySelector(`.group[data-group="${g}"]`);
+    if (cur && cur.classList.contains('closed')) { cur.classList.remove('closed'); cur.querySelector('.ghead').setAttribute('aria-expanded', 'true'); collapsed[g] = false; saveCollapsed(); }
+  }
   document.title = p.title + ' · Nhật ký setup AWS';
   if (p.sim) setupSim();
   if (p.vc) setupVc();

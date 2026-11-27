@@ -159,3 +159,8 @@ th { background: var(--panel); color: var(--muted); font-weight: 600; font-size:
 table.vc td:first-child { min-width: 9em; }
 table.vc td:first-child a { font-size: 12px; }
 .vc-order li { margin: 4px 0; }
+/* nhóm cha (VPC, EC2) chứa nhóm con */
+.group.parent > .ghead { font-size: 14px; }
+.group.parent > .gitems { border-left: 0; margin-left: 4px; padding-left: 4px; gap: 2px; }
+.group.parent > .gitems > .group { margin-top: 2px; }
+.group.parent > .gitems > .group > .ghead { font-weight: 500; color: var(--muted); }
